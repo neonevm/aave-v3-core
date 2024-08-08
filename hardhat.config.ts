@@ -19,9 +19,10 @@ import { DEFAULT_NAMED_ACCOUNTS } from '@aave/deploy-v3';
 const DEFAULT_BLOCK_GAS_LIMIT = 12450000;
 const HARDFORK = 'london';
 
-const proxyUrl = process.env.NEON_PROXY_URL;
+const proxyUrl = process.env.NEON_PROXY_URL || 'http://localhost:9090';
 // @ts-ignore
-const neon_accounts = process.env.NEON_ACCOUNTS.split(',');
+//const neon_accounts = process.env.NEON_ACCOUNTS.split(',');
+const neon_accounts = process.env.NEON_ACCOUNTS ? process.env.NEON_ACCOUNTS.split(',') : [];
 // @ts-ignore
 const chainId = parseInt(process.env.NEON_CHAIN_ID) || 111;
 
