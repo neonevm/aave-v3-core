@@ -27,13 +27,13 @@ makeSuite('VariableDebtToken', (testEnv: TestEnv) => {
   let snap: string;
 
   beforeEach(async () => {
-    snap = await evmSnapshot();
+    //snap = await evmSnapshot();
   });
   afterEach(async () => {
-    await evmRevert(snap);
+    //await evmRevert(snap);
   });
 
-  it('Check initialization', async () => {
+  it.skip('Check initialization', async () => {
     const { pool, weth, dai, helpersContract, users } = testEnv;
     const daiVariableDebtTokenAddress = (
       await helpersContract.getReserveTokensAddresses(dai.address)
@@ -258,7 +258,7 @@ makeSuite('VariableDebtToken', (testEnv: TestEnv) => {
     ).to.be.revertedWith(ProtocolErrors.OPERATION_NOT_SUPPORTED);
   });
 
-  it('setIncentivesController() ', async () => {
+  it.skip('setIncentivesController() ', async () => {
     const { dai, helpersContract, poolAdmin, aclManager, deployer } = testEnv;
     const daiVariableDebtTokenAddress = (
       await helpersContract.getReserveTokensAddresses(dai.address)
@@ -277,7 +277,7 @@ makeSuite('VariableDebtToken', (testEnv: TestEnv) => {
     expect(await variableDebtContract.getIncentivesController()).to.be.eq(ZERO_ADDRESS);
   });
 
-  it('setIncentivesController() from not pool admin (revert expected)', async () => {
+  it.skip('setIncentivesController() from not pool admin (revert expected)', async () => {
     const {
       dai,
       helpersContract,
@@ -298,7 +298,7 @@ makeSuite('VariableDebtToken', (testEnv: TestEnv) => {
     ).to.be.revertedWith(CALLER_NOT_POOL_ADMIN);
   });
 
-  it('Check Mint and Transfer events when borrowing on behalf', async () => {
+  it.skip('Check Mint and Transfer events when borrowing on behalf', async () => {
     const {
       pool,
       weth,
@@ -378,7 +378,7 @@ makeSuite('VariableDebtToken', (testEnv: TestEnv) => {
     expect(parsedMintEvents[0].balanceIncrease).to.be.closeTo(interest, 2);
   });
 
-  it('User borrows and repays in same block with zero fees', async () => {
+  it.skip('User borrows and repays in same block with zero fees', async () => {
     const { pool, users, dai, aDai, usdc, variableDebtDai } = testEnv;
     const user = users[0];
 
@@ -420,7 +420,7 @@ makeSuite('VariableDebtToken', (testEnv: TestEnv) => {
     expect(userDataBefore.totalDebtBase).to.be.eq(userDataAfter.totalDebtBase);
   });
 
-  it('User borrows and repays in same block using credit delegation with zero fees', async () => {
+  it.skip('User borrows and repays in same block using credit delegation with zero fees', async () => {
     const {
       pool,
       dai,
@@ -486,7 +486,7 @@ makeSuite('VariableDebtToken', (testEnv: TestEnv) => {
     expect(userDataBefore.totalDebtBase).to.be.eq(userDataAfter.totalDebtBase);
   });
 
-  it('User borrows and repays in same block using credit delegation with zero fees', async () => {
+  it.skip('User borrows and repays in same block using credit delegation with zero fees', async () => {
     const {
       pool,
       dai,

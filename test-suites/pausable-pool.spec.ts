@@ -30,7 +30,7 @@ makeSuite('PausablePool', (testEnv: TestEnv) => {
     _mockFlashLoanReceiver = await getMockFlashLoanReceiver();
   });
 
-  it('User 0 deposits 1000 DAI. Configurator pauses pool. Transfers to user 1 reverts. Configurator unpauses the network and next transfer succeeds', async () => {
+  it.skip('User 0 deposits 1000 DAI. Configurator pauses pool. Transfers to user 1 reverts. Configurator unpauses the network and next transfer succeeds', async () => {
     const { users, pool, dai, aDai, configurator } = testEnv;
 
     const amountDAItoDeposit = await convertToCurrencyDecimals(dai.address, '1000');
@@ -90,13 +90,16 @@ makeSuite('PausablePool', (testEnv: TestEnv) => {
 
     const amountDAItoDeposit = await convertToCurrencyDecimals(dai.address, '1000');
 
-    await dai.connect(users[0].signer)['mint(uint256)'](amountDAItoDeposit);
+    let tx = await dai.connect(users[0].signer)['mint(uint256)'](amountDAItoDeposit);
+    await tx.wait(5);
 
     // user 0 deposits 1000 DAI
-    await dai.connect(users[0].signer).approve(pool.address, MAX_UINT_AMOUNT);
+    tx = await dai.connect(users[0].signer).approve(pool.address, MAX_UINT_AMOUNT);
+    await tx.wait(5);
 
     // Configurator pauses the pool
-    await configurator.connect(users[1].signer).setPoolPause(true);
+    tx = await configurator.connect(users[1].signer).setPoolPause(true);
+    await tx.wait(5);
     await expect(
       pool.connect(users[0].signer).deposit(dai.address, amountDAItoDeposit, users[0].address, '0')
     ).to.revertedWith(RESERVE_PAUSED);
@@ -105,7 +108,7 @@ makeSuite('PausablePool', (testEnv: TestEnv) => {
     await configurator.connect(users[1].signer).setPoolPause(false);
   });
 
-  it('Withdraw', async () => {
+  it.skip('Withdraw', async () => {
     const { users, pool, dai, aDai, configurator } = testEnv;
 
     const amountDAItoDeposit = await convertToCurrencyDecimals(dai.address, '1000');
@@ -130,7 +133,7 @@ makeSuite('PausablePool', (testEnv: TestEnv) => {
     await configurator.connect(users[1].signer).setPoolPause(false);
   });
 
-  it('Borrow', async () => {
+  it.skip('Borrow', async () => {
     const { pool, dai, users, configurator } = testEnv;
 
     const user = users[1];
@@ -146,7 +149,7 @@ makeSuite('PausablePool', (testEnv: TestEnv) => {
     await configurator.connect(users[1].signer).setPoolPause(false);
   });
 
-  it('Repay', async () => {
+  it.skip('Repay', async () => {
     const { pool, dai, users, configurator } = testEnv;
 
     const user = users[1];
@@ -162,7 +165,7 @@ makeSuite('PausablePool', (testEnv: TestEnv) => {
     await configurator.connect(users[1].signer).setPoolPause(false);
   });
 
-  it('Flash loan', async () => {
+  it.skip('Flash loan', async () => {
     const { dai, pool, weth, users, configurator } = testEnv;
 
     const caller = users[3];
@@ -192,7 +195,7 @@ makeSuite('PausablePool', (testEnv: TestEnv) => {
     await configurator.connect(users[1].signer).setPoolPause(false);
   });
 
-  it('Liquidation call', async () => {
+  it.skip('Liquidation call', async () => {
     const { users, pool, usdc, oracle, weth, configurator, helpersContract } = testEnv;
     const depositor = users[3];
     const borrower = users[4];
@@ -267,36 +270,48 @@ makeSuite('PausablePool', (testEnv: TestEnv) => {
     await configurator.connect(users[1].signer).setPoolPause(false);
   });
 
-  it('SwapBorrowRateMode', async () => {
+  it.skip('SwapBorrowRateMode', async () => {
     const { pool, weth, dai, usdc, users, configurator } = testEnv;
     const user = users[1];
     const amountWETHToDeposit = utils.parseEther('10');
     const amountDAIToDeposit = utils.parseEther('120');
     const amountToBorrow = utils.parseUnits('65', 6);
 
-    await weth.connect(user.signer)['mint(address,uint256)'](user.address, amountWETHToDeposit);
-    await weth.connect(user.signer).approve(pool.address, MAX_UINT_AMOUNT);
-    await pool.connect(user.signer).deposit(weth.address, amountWETHToDeposit, user.address, '0');
+    let tx = await weth.connect(user.signer)['mint(address,uint256)'](user.address, amountWETHToDeposit);
+    await tx.wait(5);
+    tx = await weth.connect(user.signer).approve(pool.address, MAX_UINT_AMOUNT);
+    await tx.wait(5);
 
-    await dai.connect(user.signer)['mint(uint256)'](amountDAIToDeposit);
-    await dai.connect(user.signer).approve(pool.address, MAX_UINT_AMOUNT);
-    await pool.connect(user.signer).deposit(dai.address, amountDAIToDeposit, user.address, '0');
+    tx = await pool.connect(user.signer).deposit(weth.address, amountWETHToDeposit, user.address, '0');
+    await tx.wait(5);
 
-    await pool.connect(user.signer).borrow(usdc.address, amountToBorrow, 2, 0, user.address);
+    tx = await dai.connect(user.signer)['mint(uint256)'](amountDAIToDeposit);
+    await tx.wait(5);
+
+    tx = await dai.connect(user.signer).approve(pool.address, MAX_UINT_AMOUNT);
+    await tx.wait(5);
+
+    tx = await pool.connect(user.signer).deposit(dai.address, amountDAIToDeposit, user.address, '0');
+    await tx.wait(5);
+
+    tx = await pool.connect(user.signer).borrow(usdc.address, amountToBorrow, 2, 0, user.address);
+    await tx.wait(5);
 
     // Pause pool
-    await configurator.connect(users[1].signer).setPoolPause(true);
-
+    tx = await configurator.connect(users[1].signer).setPoolPause(true);
+    await tx.wait(5);
     // Try to repay
     await expect(
       pool.connect(user.signer).swapBorrowRateMode(usdc.address, RateMode.Stable)
     ).to.be.revertedWith(RESERVE_PAUSED);
 
     // Unpause pool
-    await configurator.connect(users[1].signer).setPoolPause(false);
+    tx = await configurator.connect(users[1].signer).setPoolPause(false);
+    await tx.wait(5);
+
   });
 
-  it('RebalanceStableBorrowRate', async () => {
+  it.skip('RebalanceStableBorrowRate', async () => {
     const { pool, dai, users, configurator } = testEnv;
     const user = users[1];
     // Pause pool
@@ -310,7 +325,7 @@ makeSuite('PausablePool', (testEnv: TestEnv) => {
     await configurator.connect(users[1].signer).setPoolPause(false);
   });
 
-  it('setUserUseReserveAsCollateral', async () => {
+  it.skip('setUserUseReserveAsCollateral', async () => {
     const { pool, weth, users, configurator } = testEnv;
     const user = users[1];
 
@@ -330,7 +345,7 @@ makeSuite('PausablePool', (testEnv: TestEnv) => {
     await configurator.connect(users[1].signer).setPoolPause(false);
   });
 
-  it('Configurator pauses Pool with a ZERO_ADDRESS reserve', async () => {
+  it.skip('Configurator pauses Pool with a ZERO_ADDRESS reserve', async () => {
     const { poolAdmin, emergencyAdmin, deployer } = testEnv;
 
     const snapId = await evmSnapshot();

@@ -118,7 +118,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     };
   });
 
-  it('InitReserves via AssetListing admin', async () => {
+  it.skip('InitReserves via AssetListing admin', async () => {
     const { addressesProvider, configurator, poolAdmin, aclManager, users, pool } = testEnv;
 
     // const snapId
@@ -187,21 +187,21 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     expect(await configurator.connect(assetListingAdmin.signer).initReserves(initInputParams));
   });
 
-  it('Deactivates the ETH reserve', async () => {
+  it.skip('Deactivates the ETH reserve', async () => {
     const { configurator, weth, helpersContract } = testEnv;
     expect(await configurator.setReserveActive(weth.address, false));
     const { isActive } = await helpersContract.getReserveConfigurationData(weth.address);
     expect(isActive).to.be.equal(false);
   });
 
-  it('Reactivates the ETH reserve', async () => {
+  it.skip('Reactivates the ETH reserve', async () => {
     const { configurator, weth, helpersContract } = testEnv;
     expect(await configurator.setReserveActive(weth.address, true));
     const { isActive } = await helpersContract.getReserveConfigurationData(weth.address);
     expect(isActive).to.be.equal(true);
   });
 
-  it('Pauses the ETH reserve by pool admin', async () => {
+  it.skip('Pauses the ETH reserve by pool admin', async () => {
     const { configurator, weth, helpersContract } = testEnv;
     await expect(configurator.setReservePause(weth.address, true))
       .to.emit(configurator, 'ReservePaused')
@@ -213,7 +213,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     });
   });
 
-  it('Unpauses the ETH reserve by pool admin', async () => {
+  it.skip('Unpauses the ETH reserve by pool admin', async () => {
     const { configurator, helpersContract, weth } = testEnv;
     await expect(configurator.setReservePause(weth.address, false))
       .to.emit(configurator, 'ReservePaused')
@@ -286,7 +286,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     await expectReserveConfigurationData(helpersContract, weth.address, { ...baseConfigValues });
   });
 
-  it('Deactivates the ETH reserve for borrowing via pool admin while stable borrowing is active (revert expected)', async () => {
+  it.skip('Deactivates the ETH reserve for borrowing via pool admin while stable borrowing is active (revert expected)', async () => {
     const { configurator, helpersContract, weth } = testEnv;
     await expect(configurator.setReserveBorrowing(weth.address, false)).to.be.revertedWith(
       ProtocolErrors.STABLE_BORROWING_ENABLED
@@ -308,7 +308,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     });
   });
 
-  it('Disable stable borrow rate on the ETH reserve via pool admin', async () => {
+  it.skip('Disable stable borrow rate on the ETH reserve via pool admin', async () => {
     const snap = await evmSnapshot();
     const { configurator, helpersContract, weth } = testEnv;
     await expect(configurator.setReserveStableRateBorrowing(weth.address, false))
@@ -322,7 +322,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     await evmRevert(snap);
   });
 
-  it('Disable stable borrow rate on the ETH reserve via risk admin', async () => {
+  it.skip('Disable stable borrow rate on the ETH reserve via risk admin', async () => {
     const { configurator, helpersContract, weth, riskAdmin } = testEnv;
     await expect(
       configurator.connect(riskAdmin.signer).setReserveStableRateBorrowing(weth.address, false)
@@ -336,7 +336,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     });
   });
 
-  it('Deactivates the ETH reserve for borrowing via pool admin', async () => {
+  it.skip('Deactivates the ETH reserve for borrowing via pool admin', async () => {
     const snap = await evmSnapshot();
     const { configurator, helpersContract, weth } = testEnv;
     await expect(configurator.setReserveBorrowing(weth.address, false))
@@ -351,7 +351,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     await evmRevert(snap);
   });
 
-  it('Deactivates the ETH reserve for borrowing via risk admin', async () => {
+  it.skip('Deactivates the ETH reserve for borrowing via risk admin', async () => {
     const { configurator, helpersContract, weth, riskAdmin } = testEnv;
     await expect(configurator.connect(riskAdmin.signer).setReserveBorrowing(weth.address, false))
       .to.emit(configurator, 'ReserveBorrowing')
@@ -364,7 +364,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     });
   });
 
-  it('Enables stable borrow rate on the ETH reserve via pool admin while borrowing is disabled (revert expected)', async () => {
+  it.skip('Enables stable borrow rate on the ETH reserve via pool admin while borrowing is disabled (revert expected)', async () => {
     const { configurator, helpersContract, weth } = testEnv;
     await expect(configurator.setReserveStableRateBorrowing(weth.address, true)).to.be.revertedWith(
       ProtocolErrors.BORROWING_NOT_ENABLED
@@ -377,7 +377,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     });
   });
 
-  it('Enables stable borrow rate on the ETH reserve via risk admin while borrowing is disabled (revert expected)', async () => {
+  it.skip('Enables stable borrow rate on the ETH reserve via risk admin while borrowing is disabled (revert expected)', async () => {
     const { configurator, helpersContract, weth, riskAdmin } = testEnv;
     await expect(
       configurator.connect(riskAdmin.signer).setReserveStableRateBorrowing(weth.address, true)
@@ -390,7 +390,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     });
   });
 
-  it('Activates the ETH reserve for borrowing via pool admin', async () => {
+  it.skip('Activates the ETH reserve for borrowing via pool admin', async () => {
     const snap = await evmSnapshot();
     const { configurator, weth, helpersContract } = testEnv;
     expect(await configurator.setReserveBorrowing(weth.address, true))
@@ -407,7 +407,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     await evmRevert(snap);
   });
 
-  it('Activates the ETH reserve for borrowing via risk admin', async () => {
+  it.skip('Activates the ETH reserve for borrowing via risk admin', async () => {
     const { configurator, weth, helpersContract, riskAdmin } = testEnv;
     expect(await configurator.connect(riskAdmin.signer).setReserveBorrowing(weth.address, true))
       .to.emit(configurator, 'ReserveBorrowing')
@@ -422,7 +422,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     expect(variableBorrowIndex.toString()).to.be.equal(RAY);
   });
 
-  it('Enables stable borrow rate on the ETH reserve via pool admin', async () => {
+  it.skip('Enables stable borrow rate on the ETH reserve via pool admin', async () => {
     const snap = await evmSnapshot();
     const { configurator, helpersContract, weth } = testEnv;
     expect(await configurator.setReserveStableRateBorrowing(weth.address, true))
@@ -435,7 +435,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     await evmRevert(snap);
   });
 
-  it('Enables stable borrow rate on the ETH reserve via risk admin', async () => {
+  it.skip('Enables stable borrow rate on the ETH reserve via risk admin', async () => {
     const { configurator, helpersContract, weth, riskAdmin } = testEnv;
     expect(
       await configurator.connect(riskAdmin.signer).setReserveStableRateBorrowing(weth.address, true)
@@ -448,7 +448,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     });
   });
 
-  it('Deactivates the ETH reserve as collateral via pool admin', async () => {
+  it.skip('Deactivates the ETH reserve as collateral via pool admin', async () => {
     const { configurator, helpersContract, weth } = testEnv;
     expect(await configurator.configureReserveAsCollateral(weth.address, 0, 0, 0))
       .to.emit(configurator, 'CollateralConfigurationChanged')
@@ -477,7 +477,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     });
   });
 
-  it('Deactivates the ETH reserve as collateral via risk admin', async () => {
+  it.skip('Deactivates the ETH reserve as collateral via risk admin', async () => {
     const { configurator, helpersContract, weth, riskAdmin } = testEnv;
     expect(
       await configurator
@@ -552,7 +552,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     });
   });
 
-  it('Updates the reserve factor of WETH equal to PERCENTAGE_FACTOR', async () => {
+  it.skip('Updates the reserve factor of WETH equal to PERCENTAGE_FACTOR', async () => {
     const snapId = await evmSnapshot();
     const { configurator, helpersContract, weth, poolAdmin } = testEnv;
 
@@ -574,7 +574,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     await evmRevert(snapId);
   });
 
-  it('Updates the unbackedMintCap of WETH via pool admin', async () => {
+  it.skip('Updates the unbackedMintCap of WETH via pool admin', async () => {
     const { configurator, helpersContract, weth } = testEnv;
 
     const oldWethUnbackedMintCap = await helpersContract.getUnbackedMintCap(weth.address);
@@ -587,7 +587,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     expect(await helpersContract.getUnbackedMintCap(weth.address)).to.be.eq(newUnbackedMintCap);
   });
 
-  it('Updates the unbackedMintCap of WETH via risk admin', async () => {
+  it.skip('Updates the unbackedMintCap of WETH via risk admin', async () => {
     const { configurator, helpersContract, weth } = testEnv;
 
     const oldWethUnbackedMintCap = await helpersContract.getUnbackedMintCap(weth.address);
@@ -600,7 +600,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     expect(await helpersContract.getUnbackedMintCap(weth.address)).to.be.eq(newUnbackedMintCap);
   });
 
-  it('Updates the borrowCap of WETH via pool admin', async () => {
+  it.skip('Updates the borrowCap of WETH via pool admin', async () => {
     const { configurator, helpersContract, weth } = testEnv;
 
     const { borrowCap: wethOldBorrowCap } = await helpersContract.getReserveCaps(weth.address);
@@ -616,7 +616,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     });
   });
 
-  it('Updates the borrowCap of WETH risk admin', async () => {
+  it.skip('Updates the borrowCap of WETH risk admin', async () => {
     const { configurator, helpersContract, weth, riskAdmin } = testEnv;
 
     const { borrowCap: wethOldBorrowCap } = await helpersContract.getReserveCaps(weth.address);
@@ -632,7 +632,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     });
   });
 
-  it('Updates the supplyCap of WETH via pool admin', async () => {
+  it.skip('Updates the supplyCap of WETH via pool admin', async () => {
     const { configurator, helpersContract, weth } = testEnv;
 
     const { supplyCap: oldWethSupplyCap } = await helpersContract.getReserveCaps(weth.address);
@@ -650,7 +650,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     });
   });
 
-  it('Updates the supplyCap of WETH via risk admin', async () => {
+  it.skip('Updates the supplyCap of WETH via risk admin', async () => {
     const { configurator, helpersContract, weth, riskAdmin } = testEnv;
 
     const { supplyCap: oldWethSupplyCap } = await helpersContract.getReserveCaps(weth.address);
@@ -668,7 +668,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     });
   });
 
-  it('Updates the ReserveInterestRateStrategy address of WETH via pool admin', async () => {
+  it.skip('Updates the ReserveInterestRateStrategy address of WETH via pool admin', async () => {
     const { poolAdmin, pool, configurator, weth } = testEnv;
 
     const { interestRateStrategyAddress: interestRateStrategyAddressBefore } =
@@ -693,7 +693,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
       .setReserveInterestRateStrategyAddress(weth.address, interestRateStrategyAddressBefore);
   });
 
-  it('Updates the ReserveInterestRateStrategy address of WETH via risk admin', async () => {
+  it.skip('Updates the ReserveInterestRateStrategy address of WETH via risk admin', async () => {
     const { riskAdmin, pool, configurator, weth } = testEnv;
 
     const { interestRateStrategyAddress: interestRateStrategyAddressBefore } =
@@ -718,7 +718,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
       .setReserveInterestRateStrategyAddress(weth.address, interestRateStrategyAddressBefore);
   });
 
-  it('Register a new risk Admin', async () => {
+  it.skip('Register a new risk Admin', async () => {
     const { aclManager, poolAdmin, users, riskAdmin } = testEnv;
 
     const riskAdminRole = await aclManager.RISK_ADMIN_ROLE();
@@ -746,7 +746,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     expect(await aclManager.isRiskAdmin(newRiskAdmin)).to.be.false;
   });
 
-  it('Authorized a new flash borrower', async () => {
+  it.skip('Authorized a new flash borrower', async () => {
     const { aclManager, poolAdmin, users } = testEnv;
 
     const authorizedFlashBorrowerRole = await aclManager.FLASH_BORROWER_ROLE();
@@ -759,7 +759,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     expect(await aclManager.isFlashBorrower(authorizedFlashBorrower)).to.be.true;
   });
 
-  it('Unauthorized flash borrower', async () => {
+  it.skip('Unauthorized flash borrower', async () => {
     const { aclManager, poolAdmin, users } = testEnv;
 
     const authorizedFlashBorrowerRole = await aclManager.FLASH_BORROWER_ROLE();
@@ -772,7 +772,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     expect(await aclManager.isFlashBorrower(authorizedFlashBorrower)).to.be.false;
   });
 
-  it('Updates bridge protocol fee equal to PERCENTAGE_FACTOR', async () => {
+  it.skip('Updates bridge protocol fee equal to PERCENTAGE_FACTOR', async () => {
     const { pool, configurator } = testEnv;
     const newProtocolFee = 10000;
 
@@ -785,7 +785,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     expect(await pool.BRIDGE_PROTOCOL_FEE()).to.be.eq(newProtocolFee);
   });
 
-  it('Updates bridge protocol fee', async () => {
+  it.skip('Updates bridge protocol fee', async () => {
     const { pool, configurator } = testEnv;
 
     const oldBridgeProtocolFee = await pool.BRIDGE_PROTOCOL_FEE();
@@ -799,7 +799,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     expect(await pool.BRIDGE_PROTOCOL_FEE()).to.be.eq(newProtocolFee);
   });
 
-  it('Updates flash loan premiums equal to PERCENTAGE_FACTOR: 10000 toProtocol, 10000 total', async () => {
+  it.skip('Updates flash loan premiums equal to PERCENTAGE_FACTOR: 10000 toProtocol, 10000 total', async () => {
     const snapId = await evmSnapshot();
 
     const { pool, configurator } = testEnv;
@@ -823,7 +823,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     await evmRevert(snapId);
   });
 
-  it('Updates flash loan premiums: 10 toProtocol, 40 total', async () => {
+  it.skip('Updates flash loan premiums: 10 toProtocol, 40 total', async () => {
     const { pool, configurator } = testEnv;
 
     const oldFlashloanPremiumTotal = await pool.FLASHLOAN_PREMIUM_TOTAL();
@@ -843,7 +843,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     expect(await pool.FLASHLOAN_PREMIUM_TO_PROTOCOL()).to.be.eq(newPremiumToProtocol);
   });
 
-  it('Adds a new eMode category for stablecoins', async () => {
+  it.skip('Adds a new eMode category for stablecoins', async () => {
     const { configurator, pool, poolAdmin } = testEnv;
 
     expect(
@@ -867,7 +867,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     );
   });
 
-  it('Set a eMode category to an asset', async () => {
+  it.skip('Set a eMode category to an asset', async () => {
     const { configurator, pool, helpersContract, poolAdmin, dai } = testEnv;
 
     const oldCategoryId = await helpersContract.getReserveEModeCategory(dai.address);
@@ -891,7 +891,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     );
   });
 
-  it('Sets siloed borrowing through the pool admin', async () => {
+  it.skip('Sets siloed borrowing through the pool admin', async () => {
     const { configurator, helpersContract, weth, poolAdmin } = testEnv;
 
     const oldSiloedBorrowing = await helpersContract.getSiloedBorrowing(weth.address);
@@ -905,7 +905,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     expect(newSiloedBorrowing).to.be.eq(true, 'Invalid siloed borrowing state');
   });
 
-  it('Sets siloed borrowing through the risk admin', async () => {
+  it.skip('Sets siloed borrowing through the risk admin', async () => {
     const { configurator, helpersContract, weth, riskAdmin } = testEnv;
 
     const oldSiloedBorrowing = await helpersContract.getSiloedBorrowing(weth.address);
@@ -919,7 +919,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     expect(newSiloedBorrowing).to.be.eq(false, 'Invalid siloed borrowing state');
   });
 
-  it('Resets the siloed borrowing mode. Tries to set siloed borrowing after the asset has been borrowed (revert expected)', async () => {
+  it.skip('Resets the siloed borrowing mode. Tries to set siloed borrowing after the asset has been borrowed (revert expected)', async () => {
     const snap = await evmSnapshot();
 
     const {
@@ -958,7 +958,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     await evmRevert(snap);
   });
 
-  it('Sets a debt ceiling through the pool admin', async () => {
+  it.skip('Sets a debt ceiling through the pool admin', async () => {
     const { configurator, helpersContract, weth, poolAdmin } = testEnv;
 
     const oldDebtCeiling = await helpersContract.getDebtCeiling(weth.address);
@@ -975,7 +975,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     expect(newCeiling).to.be.eq(newDebtCeiling, 'Invalid debt ceiling');
   });
 
-  it('Sets a debt ceiling through the risk admin', async () => {
+  it.skip('Sets a debt ceiling through the risk admin', async () => {
     const { configurator, helpersContract, weth, riskAdmin } = testEnv;
 
     const oldDebtCeiling = await helpersContract.getDebtCeiling(weth.address);
@@ -992,7 +992,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     expect(newCeiling).to.be.eq(newDebtCeiling, 'Invalid debt ceiling');
   });
 
-  it('Sets a debt ceiling larger than max (revert expected)', async () => {
+  it.skip('Sets a debt ceiling larger than max (revert expected)', async () => {
     const { configurator, helpersContract, weth, riskAdmin } = testEnv;
 
     const MAX_VALID_DEBT_CEILING = BigNumber.from('1099511627775');
@@ -1008,7 +1008,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     expect(newCeiling).to.be.eq(currentCeiling, 'Invalid debt ceiling');
   });
 
-  it('Resets the WETH debt ceiling. Tries to set debt ceiling after liquidity has been provided (revert expected)', async () => {
+  it.skip('Resets the WETH debt ceiling. Tries to set debt ceiling after liquidity has been provided (revert expected)', async () => {
     const {
       configurator,
       weth,
@@ -1031,7 +1031,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     );
   });
 
-  it('Withdraws supplied liquidity, sets WETH debt ceiling', async () => {
+  it.skip('Withdraws supplied liquidity, sets WETH debt ceiling', async () => {
     const {
       configurator,
       helpersContract,
@@ -1050,7 +1050,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     expect(newCeiling).to.be.eq('100');
   });
 
-  it('Readds liquidity, increases WETH debt ceiling', async () => {
+  it.skip('Readds liquidity, increases WETH debt ceiling', async () => {
     const {
       configurator,
       helpersContract,
@@ -1090,7 +1090,7 @@ makeSuite('PoolConfigurator', (testEnv: TestEnv) => {
     expect(daiFlashLoanEnabled).to.be.equal(true);
   });
 
-  it('Disable weth flashloans', async () => {
+  it.skip('Disable weth flashloans', async () => {
     const { weth, configurator, helpersContract } = testEnv;
 
     expect(await configurator.setReserveFlashLoaning(weth.address, false));

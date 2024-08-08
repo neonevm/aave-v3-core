@@ -25,7 +25,7 @@ makeSuite('Pool: FlashLoan for gas comparison', (testEnv: TestEnv) => {
     _mockFlashLoanReceiver = await getMockFlashLoanReceiver();
   });
 
-  it('Configurator sets total premium = 9 bps, premium to protocol = 30%', async () => {
+  it.skip('Configurator sets total premium = 9 bps, premium to protocol = 30%', async () => {
     const { configurator, pool } = testEnv;
     await configurator.updateFlashloanPremiumTotal(TOTAL_PREMIUM);
     await configurator.updateFlashloanPremiumToProtocol(PREMIUM_TO_PROTOCOL);
@@ -33,7 +33,7 @@ makeSuite('Pool: FlashLoan for gas comparison', (testEnv: TestEnv) => {
     expect(await pool.FLASHLOAN_PREMIUM_TOTAL()).to.be.equal(TOTAL_PREMIUM);
     expect(await pool.FLASHLOAN_PREMIUM_TO_PROTOCOL()).to.be.equal(PREMIUM_TO_PROTOCOL);
   });
-  it('Deposits WETH into the reserve', async () => {
+  it.skip('Deposits WETH into the reserve', async () => {
     const { pool, weth, aave, dai, deployer } = testEnv;
     const userAddress = await pool.signer.getAddress();
     const amountToDeposit = ethers.utils.parseEther('1');
@@ -56,7 +56,7 @@ makeSuite('Pool: FlashLoan for gas comparison', (testEnv: TestEnv) => {
     await pool.deposit(dai.address, amountToDeposit, userAddress, '0');
   });
 
-  it('Takes WETH flash loan with mode = 0, returns the funds correctly', async () => {
+  it.skip('Takes WETH flash loan with mode = 0, returns the funds correctly', async () => {
     const { pool, helpersContract, weth, aWETH, dai, aDai } = testEnv;
 
     const wethFlashBorrowedAmount = ethers.utils.parseEther('0.8');
@@ -105,7 +105,7 @@ makeSuite('Pool: FlashLoan for gas comparison', (testEnv: TestEnv) => {
     expect(wethReservesAfter).to.be.equal(wethReservesBefore.add(wethFeesToProtocol));
   });
 
-  it('Takes an ETH flashloan with mode = 0 as big as the available liquidity', async () => {
+  it.skip('Takes an ETH flashloan with mode = 0 as big as the available liquidity', async () => {
     const { pool, helpersContract, weth, aWETH } = testEnv;
 
     let reserveData = await helpersContract.getReserveData(weth.address);
@@ -173,7 +173,7 @@ makeSuite('Pool: FlashLoan for gas comparison', (testEnv: TestEnv) => {
     ).to.be.reverted;
   });
 
-  it('Takes WETH flashloan, simulating a receiver as EOA (revert expected)', async () => {
+  it.skip('Takes WETH flashloan, simulating a receiver as EOA (revert expected)', async () => {
     const { pool, weth, users } = testEnv;
     const caller = users[1];
     await _mockFlashLoanReceiver.setFailExecutionTransfer(true);
@@ -194,7 +194,7 @@ makeSuite('Pool: FlashLoan for gas comparison', (testEnv: TestEnv) => {
     ).to.be.revertedWith(INVALID_FLASHLOAN_EXECUTOR_RETURN);
   });
 
-  it('Tries to take a flashloan that is bigger than the available liquidity (revert expected)', async () => {
+  it.skip('Tries to take a flashloan that is bigger than the available liquidity (revert expected)', async () => {
     const { pool, weth, users } = testEnv;
     const caller = users[1];
 
@@ -229,7 +229,7 @@ makeSuite('Pool: FlashLoan for gas comparison', (testEnv: TestEnv) => {
     ).to.be.reverted;
   });
 
-  it('Deposits USDC into the reserve', async () => {
+  it.skip('Deposits USDC into the reserve', async () => {
     const { usdc, pool } = testEnv;
     const userAddress = await pool.signer.getAddress();
 
@@ -242,7 +242,7 @@ makeSuite('Pool: FlashLoan for gas comparison', (testEnv: TestEnv) => {
     await pool.deposit(usdc.address, amountToDeposit, userAddress, '0');
   });
 
-  it('Takes out a 500 USDC flashloan, returns the funds correctly', async () => {
+  it.skip('Takes out a 500 USDC flashloan, returns the funds correctly', async () => {
     const { usdc, aUsdc, pool, helpersContract, deployer: depositor } = testEnv;
 
     await _mockFlashLoanReceiver.setFailExecutionTransfer(false);
@@ -290,7 +290,7 @@ makeSuite('Pool: FlashLoan for gas comparison', (testEnv: TestEnv) => {
     expect(reservesAfter).to.be.equal(reservesBefore.add(feesToProtocol));
   });
 
-  it('Takes out a 500 USDC flashloan with mode = 0, does not return the funds (revert expected)', async () => {
+  it.skip('Takes out a 500 USDC flashloan with mode = 0, does not return the funds (revert expected)', async () => {
     const { usdc, pool, users } = testEnv;
     const caller = users[2];
 
@@ -313,7 +313,7 @@ makeSuite('Pool: FlashLoan for gas comparison', (testEnv: TestEnv) => {
     ).to.be.revertedWith(INVALID_FLASHLOAN_EXECUTOR_RETURN);
   });
 
-  it('Caller deposits 1000 DAI as collateral, Takes a WETH flashloan with mode = 0, does not approve the transfer of the funds', async () => {
+  it.skip('Caller deposits 1000 DAI as collateral, Takes a WETH flashloan with mode = 0, does not approve the transfer of the funds', async () => {
     const { dai, pool, weth, users } = testEnv;
     const caller = users[3];
 

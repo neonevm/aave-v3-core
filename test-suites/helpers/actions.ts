@@ -369,7 +369,6 @@ export const borrow = async (
   const tx = pool
     .connect(user.signer)
     .borrow(reserve, amountToBorrow, interestRateMode, '0', onBehalfOf);
-
   if (expectedResult === 'success') {
     const txResult = await waitForTx(await tx);
 
