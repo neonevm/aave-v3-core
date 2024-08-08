@@ -5,8 +5,7 @@ FROM node:16
 COPY --from=build-deps /usr/bin/solc /usr/bin/solc
 
 WORKDIR /app
-ADD  ./package.json /app/
 
 ADD ./ /app/
 RUN chmod +x *.sh
-RUN npm i
+RUN npm ci
