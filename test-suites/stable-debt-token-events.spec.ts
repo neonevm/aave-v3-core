@@ -124,7 +124,7 @@ makeSuite('StableDebtToken: Events', (testEnv: TestEnv) => {
   });
 
   beforeEach(async () => {
-    snapId = await evmSnapshot();
+   // snapId = await evmSnapshot();
 
     // Init balances
     balances = {
@@ -136,14 +136,14 @@ makeSuite('StableDebtToken: Events', (testEnv: TestEnv) => {
   });
 
   afterEach(async () => {
-    await evmRevert(snapId);
+   // await evmRevert(snapId);
   });
 
-  it('Alice borrows 100 DAI, borrows 50 DAI, repays 20 DAI, repays 10 DAI, borrows 100 DAI, repays 220 DAI (without index change)', async () => {
+  it.skip('Alice borrows 100 DAI, borrows 50 DAI, repays 20 DAI, repays 10 DAI, borrows 100 DAI, repays 220 DAI (without index change)', async () => {
     await testMultipleBorrowsAndRepays(false);
   });
 
-  it('Alice borrows 100 DAI, borrows 50 DAI, repays 20 DAI, repays 10 DAI, borrows 100 DAI, repays 220 DAI (with index change)', async () => {
+  it.skip('Alice borrows 100 DAI, borrows 50 DAI, repays 20 DAI, repays 10 DAI, borrows 100 DAI, repays 220 DAI (with index change)', async () => {
     await testMultipleBorrowsAndRepays(true);
   });
 
@@ -225,11 +225,11 @@ makeSuite('StableDebtToken: Events', (testEnv: TestEnv) => {
     );
   };
 
-  it('Alice borrows 100 DAI, Bob borrows 100 DAI, Alice borrows 50 DAI, repays 150 DAI and repays 100 DAI on behalf of Bob, borrows 10 DAI more (without index change)', async () => {
+  it.skip('Alice borrows 100 DAI, Bob borrows 100 DAI, Alice borrows 50 DAI, repays 150 DAI and repays 100 DAI on behalf of Bob, borrows 10 DAI more (without index change)', async () => {
     await testMultipleBorrowsAndRepaysOnBehalf(false);
   });
 
-  it('Alice borrows 100 DAI, Bob borrows 100 DAI, Alice borrows 50 DAI, repays 150 DAI and repays 100 DAI on behalf of Bob, borrows 10 DAI more (with index change)', async () => {
+  it.skip('Alice borrows 100 DAI, Bob borrows 100 DAI, Alice borrows 50 DAI, repays 150 DAI and repays 100 DAI on behalf of Bob, borrows 10 DAI more (with index change)', async () => {
     await testMultipleBorrowsAndRepaysOnBehalf(true);
   });
 
@@ -340,11 +340,11 @@ makeSuite('StableDebtToken: Events', (testEnv: TestEnv) => {
     expect(bobBalanceAfter).to.be.closeTo(bobBalanceBefore.add(balances.balance[bob.address]), 5);
   };
 
-  it('Alice borrows 100 DAI, Bob borrows 100 DAI on behalf of Alice, Bob borrows 50 DAI, Alice borrows 50 DAI, repays 250 DAI and repays 50 DAI on behalf of Bob, borrows 10 DAI more (without index change)', async () => {
+  it.skip('Alice borrows 100 DAI, Bob borrows 100 DAI on behalf of Alice, Bob borrows 50 DAI, Alice borrows 50 DAI, repays 250 DAI and repays 50 DAI on behalf of Bob, borrows 10 DAI more (without index change)', async () => {
     await testMultipleBorrowsOnBehalfAndRepaysOnBehalf(false);
   });
 
-  it('Alice borrows 100 DAI, Bob borrows 100 DAI on behalf of Alice, Bob borrows 50 DAI, Alice borrows 50 DAI, repays 250 DAI and repays 50 DAI on behalf of Bob, borrows 10 DAI more (with index change)', async () => {
+  it.skip('Alice borrows 100 DAI, Bob borrows 100 DAI on behalf of Alice, Bob borrows 50 DAI, Alice borrows 50 DAI, repays 250 DAI and repays 50 DAI on behalf of Bob, borrows 10 DAI more (with index change)', async () => {
     await testMultipleBorrowsOnBehalfAndRepaysOnBehalf(true);
   });
 

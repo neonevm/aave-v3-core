@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { utils } from 'ethers';
 import { ProtocolErrors } from '../helpers/types';
 import { makeSuite, TestEnv } from './helpers/make-suite';
-import { evmSnapshot, evmRevert, ONE_ADDRESS } from '@aave/deploy-v3';
+import { evmSnapshot, evmRevert, ONE_ADDRESS, waitForTx } from '@aave/deploy-v3';
 import { deployMintableERC20 } from '@aave/deploy-v3/dist/helpers/contract-deployments';
 import { MintableERC20 } from '../types';
 
@@ -13,11 +13,11 @@ makeSuite('Rescue tokens', (testEnv: TestEnv) => {
   let snap: string;
 
   beforeEach(async () => {
-    snap = await evmSnapshot();
+    //snap = await evmSnapshot();
   });
 
   afterEach(async () => {
-    await evmRevert(snap);
+   // await evmRevert(snap);
   });
 
   it('User tries to rescue tokens from Pool (revert expected)', async () => {
@@ -44,13 +44,13 @@ makeSuite('Rescue tokens', (testEnv: TestEnv) => {
     const amountToLock = utils.parseUnits('10', 18);
 
     // Lock
-    await usdc['mint(address,uint256)'](locker.address, amountToLock);
-    await usdc.connect(locker.signer).transfer(pool.address, amountToLock);
+    await waitForTx(await usdc['mint(address,uint256)'](locker.address, amountToLock));
+    await waitForTx(await usdc.connect(locker.signer).transfer(pool.address, amountToLock));
 
     const lockerBalanceBefore = await usdc.balanceOf(locker.address);
     const poolBalanceBefore = await usdc.balanceOf(pool.address);
 
-    expect(
+    await waitForTx(
       await pool.connect(poolAdmin.signer).rescueTokens(usdc.address, locker.address, amountToLock)
     );
 
@@ -112,13 +112,13 @@ makeSuite('Rescue tokens', (testEnv: TestEnv) => {
     const amountToLock = utils.parseUnits('10', 18);
 
     // Lock
-    await usdc['mint(address,uint256)'](locker.address, amountToLock);
-    await usdc.connect(locker.signer).transfer(aDai.address, amountToLock);
+    await waitForTx(await usdc['mint(address,uint256)'](locker.address, amountToLock));
+    await waitForTx(await usdc.connect(locker.signer).transfer(aDai.address, amountToLock));
 
     const lockerBalanceBefore = await usdc.balanceOf(locker.address);
     const aTokenBalanceBefore = await usdc.balanceOf(aDai.address);
 
-    expect(
+    await waitForTx(
       await aDai.connect(poolAdmin.signer).rescueTokens(usdc.address, locker.address, amountToLock)
     );
 

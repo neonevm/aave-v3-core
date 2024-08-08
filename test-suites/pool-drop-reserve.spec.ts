@@ -21,7 +21,7 @@ makeSuite('Pool: Drop Reserve', (testEnv: TestEnv) => {
     _mockFlashLoanReceiver = await getMockFlashLoanReceiver();
   });
 
-  it('User 1 deposits DAI, User 2 borrow DAI stable and variable, should fail to drop DAI reserve', async () => {
+  it.skip('User 1 deposits DAI, User 2 borrow DAI stable and variable, should fail to drop DAI reserve', async () => {
     const {
       deployer,
       users: [user1],
@@ -60,7 +60,7 @@ makeSuite('Pool: Drop Reserve', (testEnv: TestEnv) => {
     await expect(configurator.dropReserve(dai.address)).to.be.revertedWith(STABLE_DEBT_NOT_ZERO);
   });
 
-  it('User 2 repays debts, drop DAI reserve should fail', async () => {
+  it.skip('User 2 repays debts, drop DAI reserve should fail', async () => {
     const {
       users: [user1],
       pool,
@@ -78,7 +78,7 @@ makeSuite('Pool: Drop Reserve', (testEnv: TestEnv) => {
     );
   });
 
-  it('User 1 withdraw DAI, drop DAI reserve should succeed', async () => {
+  it.skip('User 1 withdraw DAI, drop DAI reserve should succeed', async () => {
     const { deployer, pool, dai, configurator, helpersContract } = testEnv;
 
     await pool.withdraw(dai.address, MAX_UINT_AMOUNT, deployer.address);

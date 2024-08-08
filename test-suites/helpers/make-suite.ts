@@ -197,17 +197,17 @@ const revertHead = async () => {
     await hre.tenderlyNetwork.setHead(HardhatSnapshotId);
     return;
   }
-  await evmRevert(HardhatSnapshotId);
+ // await evmRevert(HardhatSnapshotId);
 };
 
 export function makeSuite(name: string, tests: (testEnv: TestEnv) => void) {
   describe(name, () => {
     before(async () => {
-      await setSnapshot();
+     // await setSnapshot();
     });
     tests(testEnv);
-    after(async () => {
-      await revertHead();
-    });
+    // after(async () => {
+    //   await revertHead();
+    // });
   });
 }

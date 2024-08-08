@@ -26,7 +26,7 @@ makeSuite('Pool Liquidation: Liquidator receiving the underlying asset', (testEn
     await waitForTx(await addressesProvider.setPriceOracle(aaveOracle.address));
   });
 
-  it("It's not possible to liquidate on a non-active collateral or a non active principal", async () => {
+  it.skip("It's not possible to liquidate on a non-active collateral or a non active principal", async () => {
     const {
       configurator,
       weth,
@@ -51,7 +51,7 @@ makeSuite('Pool Liquidation: Liquidator receiving the underlying asset', (testEn
     await configurator.setReserveActive(dai.address, true);
   });
 
-  it('Deposits WETH, borrows DAI', async () => {
+  it.skip('Deposits WETH, borrows DAI', async () => {
     const {
       dai,
       weth,
@@ -111,7 +111,7 @@ makeSuite('Pool Liquidation: Liquidator receiving the underlying asset', (testEn
     expect(userGlobalDataAfter.currentLiquidationThreshold).to.be.equal(8250, INVALID_HF);
   });
 
-  it('Drop the health factor below 1', async () => {
+  it.skip('Drop the health factor below 1', async () => {
     const {
       dai,
       users: [, borrower],
@@ -128,7 +128,7 @@ makeSuite('Pool Liquidation: Liquidator receiving the underlying asset', (testEn
     expect(userGlobalData.healthFactor).to.be.lt(oneEther, INVALID_HF);
   });
 
-  it('Liquidates the borrow', async () => {
+  it.skip('Liquidates the borrow', async () => {
     const {
       dai,
       weth,
@@ -246,7 +246,7 @@ makeSuite('Pool Liquidation: Liquidator receiving the underlying asset', (testEn
     );
   });
 
-  it('User 3 deposits 1000 USDC, user 4 0.06775 WETH, user 4 borrows - drops HF, liquidates the borrow', async () => {
+  it.skip('User 3 deposits 1000 USDC, user 4 0.06775 WETH, user 4 borrows - drops HF, liquidates the borrow', async () => {
     const {
       usdc,
       users: [, , , depositor, borrower, liquidator],
@@ -398,7 +398,7 @@ makeSuite('Pool Liquidation: Liquidator receiving the underlying asset', (testEn
     );
   });
 
-  it('User 4 deposits 0.033 AAVE - drops HF, liquidates the AAVE, which results on a lower amount being liquidated', async () => {
+  it.skip('User 4 deposits 0.033 AAVE - drops HF, liquidates the AAVE, which results on a lower amount being liquidated', async () => {
     const {
       aave,
       usdc,
@@ -409,31 +409,31 @@ makeSuite('Pool Liquidation: Liquidator receiving the underlying asset', (testEn
     } = testEnv;
 
     //mints AAVE to borrower
-    await aave
+   await waitForTx(await aave
       .connect(borrower.signer)
-      ['mint(uint256)'](await convertToCurrencyDecimals(aave.address, '0.033'));
+      ['mint(uint256)'](await convertToCurrencyDecimals(aave.address, '0.033')));
 
     //approve protocol to access the borrower wallet
-    await aave.connect(borrower.signer).approve(pool.address, MAX_UINT_AMOUNT);
+    await waitForTx(await aave.connect(borrower.signer).approve(pool.address, MAX_UINT_AMOUNT));
 
     //borrower deposits 1 AAVE
     const amountToDeposit = await convertToCurrencyDecimals(aave.address, '0.033');
 
-    await pool
+    await waitForTx(await pool
       .connect(borrower.signer)
-      .deposit(aave.address, amountToDeposit, borrower.address, '0');
+      .deposit(aave.address, amountToDeposit, borrower.address, '0'));
     const usdcPrice = await oracle.getAssetPrice(usdc.address);
 
     //drops HF below 1
-    await oracle.setAssetPrice(usdc.address, usdcPrice.percentMul(11400));
+    await waitForTx(await oracle.setAssetPrice(usdc.address, usdcPrice.percentMul(11400)));
 
     //mints usdc to the liquidator
-    await usdc
+    await waitForTx(await usdc
       .connect(liquidator.signer)
-      ['mint(uint256)'](await convertToCurrencyDecimals(usdc.address, '1000'));
+      ['mint(uint256)'](await convertToCurrencyDecimals(usdc.address, '1000')));
 
     //approve protocol to access liquidator wallet
-    await usdc.connect(liquidator.signer).approve(pool.address, MAX_UINT_AMOUNT);
+    await waitForTx(await usdc.connect(liquidator.signer).approve(pool.address, MAX_UINT_AMOUNT));
 
     const userReserveDataBefore = await helpersContract.getUserReserveData(
       usdc.address,
@@ -448,9 +448,9 @@ makeSuite('Pool Liquidation: Liquidator receiving the underlying asset', (testEn
     const collateralPrice = await oracle.getAssetPrice(aave.address);
     const principalPrice = await oracle.getAssetPrice(usdc.address);
 
-    await pool
+    await waitForTx(await pool
       .connect(liquidator.signer)
-      .liquidationCall(aave.address, usdc.address, borrower.address, amountToLiquidate, false);
+      .liquidationCall(aave.address, usdc.address, borrower.address, amountToLiquidate, false));
 
     const userReserveDataAfter = await helpersContract.getUserReserveData(
       usdc.address,

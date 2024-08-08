@@ -19,6 +19,14 @@ import { DEFAULT_NAMED_ACCOUNTS } from '@aave/deploy-v3';
 const DEFAULT_BLOCK_GAS_LIMIT = 12450000;
 const HARDFORK = 'london';
 
+const proxyUrl = process.env.NEON_PROXY_URL;
+// @ts-ignore
+const neon_accounts = process.env.NEON_ACCOUNTS.split(',');
+// @ts-ignore
+const chainId = parseInt(process.env.NEON_CHAIN_ID) || 111;
+
+
+
 const hardhatConfig = {
   gasReporter: {
     enabled: true,
@@ -28,6 +36,10 @@ const hardhatConfig = {
     runOnCompile: false,
     disambiguatePaths: false,
   },
+  ignition: {
+        blockPollingInterval: 1_000,
+        requiredConfirmations: 5,
+      },
   solidity: {
     // Docs for the compiler https://docs.soliditylang.org/en/v0.8.10/using-the-compiler.html
     version: '0.8.10',
@@ -45,7 +57,7 @@ const hardhatConfig = {
   },
   mocha: {
     timeout: 0,
-    bail: true,
+    bail: false,
   },
   tenderly: {
     project: process.env.TENDERLY_PROJECT || '',
@@ -83,6 +95,15 @@ const hardhatConfig = {
         count: 20,
       },
     },
+    neonlabs: {
+      url: proxyUrl,
+      accounts: neon_accounts,
+      chainId: chainId,
+      allowUnlimitedContractSize: false,
+      timeout: 100000000,
+      isFork: true,
+      blockconfirmations: 5
+    },
   },
   namedAccounts: {
     ...DEFAULT_NAMED_ACCOUNTS,
@@ -96,5 +117,6 @@ const hardhatConfig = {
     ],
   },
 };
+
 
 export default hardhatConfig;

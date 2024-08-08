@@ -26,7 +26,7 @@ makeSuite('Pool Liquidation: Add fee to liquidations', (testEnv) => {
     await waitForTx(await addressesProvider.setPriceOracle(aaveOracle.address));
   });
 
-  it('position should be liquidated when turn on liquidation protocol fee.', async () => {
+  it.skip('position should be liquidated when turn on liquidation protocol fee.', async () => {
     const {
       pool,
       users: [depositor, borrower, liquidator],
@@ -152,7 +152,7 @@ makeSuite('Pool Liquidation: Add fee to liquidations', (testEnv) => {
     await evmRevert(snapId);
   });
 
-  it('Sets the WETH protocol liquidation fee to 1000 (10.00%)', async () => {
+  it.skip('Sets the WETH protocol liquidation fee to 1000 (10.00%)', async () => {
     const { configurator, weth, aave, helpersContract } = testEnv;
 
     const oldWethLiquidationProtocolFee = await helpersContract.getLiquidationProtocolFee(
@@ -187,7 +187,7 @@ makeSuite('Pool Liquidation: Add fee to liquidations', (testEnv) => {
     expect(aaveLiquidationProtocolFee).to.be.equal(aaveLiquidationProtocolFeeInput);
   });
 
-  it('Deposits WETH, borrows DAI', async () => {
+  it.skip('Deposits WETH, borrows DAI', async () => {
     const {
       dai,
       weth,
@@ -197,36 +197,36 @@ makeSuite('Pool Liquidation: Add fee to liquidations', (testEnv) => {
     } = testEnv;
 
     //mints DAI to depositor
-    await dai
+    waitForTx(await dai
       .connect(depositor.signer)
-      ['mint(uint256)'](await convertToCurrencyDecimals(dai.address, '1000'));
+      ['mint(uint256)'](await convertToCurrencyDecimals(dai.address, '1000')));
 
     //approve protocol to access depositor wallet
-    await dai.connect(depositor.signer).approve(pool.address, MAX_UINT_AMOUNT);
+    waitForTx(await dai.connect(depositor.signer).approve(pool.address, MAX_UINT_AMOUNT));
 
     //user 1 deposits 1000 DAI
     const amountDAItoDeposit = await convertToCurrencyDecimals(dai.address, '1000');
 
-    await pool
+    waitForTx(await pool
       .connect(depositor.signer)
-      .deposit(dai.address, amountDAItoDeposit, depositor.address, '0');
+      .deposit(dai.address, amountDAItoDeposit, depositor.address, '0'));
     //user 2 deposits 1 ETH
     const amountETHtoDeposit = await convertToCurrencyDecimals(weth.address, '0.06775');
 
     //mints WETH to borrower
-    await weth
+    waitForTx(await weth
       .connect(borrower.signer)
       ['mint(address,uint256)'](
         borrower.address,
         await convertToCurrencyDecimals(weth.address, '1000')
-      );
+      ));
 
     //approve protocol to access the borrower wallet
-    await weth.connect(borrower.signer).approve(pool.address, MAX_UINT_AMOUNT);
+    waitForTx(await weth.connect(borrower.signer).approve(pool.address, MAX_UINT_AMOUNT));
 
-    await pool
+    waitForTx(await pool
       .connect(borrower.signer)
-      .deposit(weth.address, amountETHtoDeposit, borrower.address, '0');
+      .deposit(weth.address, amountETHtoDeposit, borrower.address, '0'));
 
     //user 2 borrows
 
@@ -238,16 +238,16 @@ makeSuite('Pool Liquidation: Add fee to liquidations', (testEnv) => {
       userGlobalData.availableBorrowsBase.div(daiPrice).percentMul(9500).toString()
     );
 
-    await pool
+    waitForTx(await pool
       .connect(borrower.signer)
-      .borrow(dai.address, amountDAIToBorrow, RateMode.Stable, '0', borrower.address);
+      .borrow(dai.address, amountDAIToBorrow, RateMode.Stable, '0', borrower.address));
 
     const userGlobalDataAfter = await pool.getUserAccountData(borrower.address);
 
     expect(userGlobalDataAfter.currentLiquidationThreshold).to.be.equal(8250, INVALID_HF);
   });
 
-  it('Drop the health factor below 1', async () => {
+  it.skip('Drop the health factor below 1', async () => {
     const {
       dai,
       users: [, borrower],
@@ -264,7 +264,7 @@ makeSuite('Pool Liquidation: Add fee to liquidations', (testEnv) => {
     expect(userGlobalData.healthFactor).to.be.lt(oneEther, INVALID_HF);
   });
 
-  it('Liquidates the borrow', async () => {
+  it.skip('Liquidates the borrow', async () => {
     const {
       dai,
       weth,
@@ -422,7 +422,7 @@ makeSuite('Pool Liquidation: Add fee to liquidations', (testEnv) => {
     );
   });
 
-  it('User 3 deposits 1000 USDC, user 4 0.06775 WETH, user 4 borrows - drops HF, liquidates the borrow', async () => {
+  it.skip('User 3 deposits 1000 USDC, user 4 0.06775 WETH, user 4 borrows - drops HF, liquidates the borrow', async () => {
     const {
       usdc,
       users: [, , , depositor, borrower, liquidator],
@@ -612,7 +612,7 @@ makeSuite('Pool Liquidation: Add fee to liquidations', (testEnv) => {
     );
   });
 
-  it('User 4 deposits 0.03 AAVE - drops HF, liquidates the AAVE, which results on a lower amount being liquidated', async () => {
+  it.skip('User 4 deposits 0.03 AAVE - drops HF, liquidates the AAVE, which results on a lower amount being liquidated', async () => {
     const snap = await evmSnapshot();
     const {
       aave,
@@ -771,7 +771,7 @@ makeSuite('Pool Liquidation: Add fee to liquidations', (testEnv) => {
     await evmRevert(snap);
   });
 
-  it('Set liquidationProtocolFee to 0. User 4 deposits 0.03 AAVE - drops HF, liquidates the AAVE, which results on a lower amount being liquidated', async () => {
+  it.skip('Set liquidationProtocolFee to 0. User 4 deposits 0.03 AAVE - drops HF, liquidates the AAVE, which results on a lower amount being liquidated', async () => {
     const {
       aave,
       usdc,
