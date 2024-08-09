@@ -24,7 +24,7 @@ export const setAutomineEvm = async (activate: boolean) => {
 };
 
 export const impersonateAccountsHardhat = async (accounts: string[]) => {
-  if (process.env.TENDERLY === 'true') {
+  if (true) {
     return;
   }
   // eslint-disable-next-line no-restricted-syntax
