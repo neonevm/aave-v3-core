@@ -1,0 +1,46 @@
+diff -ur DeploymentsManager.js DeploymentsManager.js
+--- DeploymentsManager.js	2024-08-08 20:22:36
++++ DeploymentsManager.js	2024-08-08 21:15:30
+@@ -154,7 +154,7 @@
+                 }
+                 if (this.db.pastFixtures[fixtureKey]) {
+                     const pastFixture = this.db.pastFixtures[fixtureKey];
+-                    const success = await this.revertSnapshot(pastFixture);
++                    const success = true;
+                     if (success) {
+                         return this.db.deployments;
+                     }
+@@ -163,7 +163,7 @@
+                     }
+                 }
+                 if (globalFixture && options.fallbackToGlobal) {
+-                    const success = await this.revertSnapshot(globalFixture);
++                    const success = true;
+                     if (success) {
+                         return this.db.deployments;
+                     }
+@@ -178,7 +178,7 @@
+                     log: false,
+                     savePendingTx: false,
+                 });
+-                await this.saveSnapshot(fixtureKey);
++                //await this.saveSnapshot(fixtureKey);
+                 return this.db.deployments;
+             },
+             createFixture: (func) => {
+@@ -190,13 +190,13 @@
+                     }
+                     const saved = this.db.pastFixtures[id];
+                     if (saved) {
+-                        const success = await this.revertSnapshot(saved);
++                        //const success = await this.revertSnapshot(saved);
+                         if (success) {
+                             return saved.data;
+                         }
+                     }
+                     const data = await func(this.env, options);
+-                    await this.saveSnapshot(id, data);
++                    //await this.saveSnapshot(id, data);
+                     return data;
+                 };
+             },

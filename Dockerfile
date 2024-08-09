@@ -9,3 +9,6 @@ WORKDIR /app
 ADD ./ /app/
 RUN chmod +x *.sh
 RUN npm ci
+COPY hardhat-deploy.patch /tmp/
+RUN cd ./node_modules/hardhat-deploy/dist/src && patch -p0 < /tmp/hardhat-deploy.patch
+
