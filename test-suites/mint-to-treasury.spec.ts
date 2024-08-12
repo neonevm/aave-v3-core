@@ -60,7 +60,13 @@ makeSuite('Mint To Treasury', (testEnv: TestEnv) => {
     const treasuryAddress = await aDai.RESERVE_TREASURY_ADDRESS();
     const { accruedToTreasury } = await pool.getReserveData(dai.address);
 
-    await waitForTx((await pool.connect(users[0].signer).mintToTreasury([dai.address])));
+    let tx = await waitForTx(await pool.connect(users[0].signer).mintToTreasury([dai.address]));
+    testEnv.report.addAction(
+      'Mint to treasury',
+      tx.gasUsed.toNumber(),
+      tx.effectiveGasPrice,
+      tx.transactionHash
+    );
 
     const normalizedIncome = await pool.getReserveNormalizedIncome(dai.address);
     const treasuryBalance = await aDai.balanceOf(treasuryAddress);
