@@ -17,7 +17,7 @@ makeSuite('Rescue tokens', (testEnv: TestEnv) => {
   });
 
   afterEach(async () => {
-   // await evmRevert(snap);
+    // await evmRevert(snap);
   });
 
   it('User tries to rescue tokens from Pool (revert expected)', async () => {
@@ -118,8 +118,14 @@ makeSuite('Rescue tokens', (testEnv: TestEnv) => {
     const lockerBalanceBefore = await usdc.balanceOf(locker.address);
     const aTokenBalanceBefore = await usdc.balanceOf(aDai.address);
 
-    await waitForTx(
+    let tx = await waitForTx(
       await aDai.connect(poolAdmin.signer).rescueTokens(usdc.address, locker.address, amountToLock)
+    );
+    testEnv.report.addAction(
+      'Rescue tokens',
+      tx.gasUsed.toNumber(),
+      tx.effectiveGasPrice,
+      tx.transactionHash
     );
 
     const aTokenBalanceAfter = await usdc.balanceOf(aDai.address);

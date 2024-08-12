@@ -70,15 +70,23 @@ makeSuite('Pool Liquidation: Edge cases', (testEnv: TestEnv) => {
     await oracle.setAssetPrice(dai.address, daiPrice.percentDiv('2700'));
 
     // Borrow
-    await pool
-      .connect(borrower.signer)
-      .borrow(
-        dai.address,
-        await convertToCurrencyDecimals(dai.address, '500'),
-        RateMode.Stable,
-        0,
-        borrower.address
-      );
+    let tx = await waitForTx(
+      await pool
+        .connect(borrower.signer)
+        .borrow(
+          dai.address,
+          await convertToCurrencyDecimals(dai.address, '500'),
+          RateMode.Stable,
+          0,
+          borrower.address
+        )
+    );
+    testEnv.report.addAction(
+      'Liquidation edge, borrow',
+      tx.gasUsed.toNumber(),
+      tx.effectiveGasPrice,
+      tx.transactionHash
+    );
 
     // Borrow
     await pool

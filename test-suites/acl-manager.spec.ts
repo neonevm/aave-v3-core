@@ -38,11 +38,10 @@ makeSuite('Access Control List Manager', (testEnv: TestEnv) => {
     let tx = await aclManager
       .connect(deployer.signer)
       .grantRole(FLASH_BORROW_ADMIN_ROLE, flashBorrowAdmin.address);
-    //wait for transaction
     await tx.wait();
-      console.log("await aclManager.hasRole(FLASH_BORROW_ADMIN_ROLE, flashBorrowAdmin.address)");
+    console.log('await aclManager.hasRole(FLASH_BORROW_ADMIN_ROLE, flashBorrowAdmin.address)');
 
-      console.log(await aclManager.hasRole(FLASH_BORROW_ADMIN_ROLE, flashBorrowAdmin.address));
+    console.log(await aclManager.hasRole(FLASH_BORROW_ADMIN_ROLE, flashBorrowAdmin.address));
     expect(await aclManager.hasRole(FLASH_BORROW_ADMIN_ROLE, flashBorrowAdmin.address)).to.be.eq(
       true
     );
@@ -93,7 +92,9 @@ makeSuite('Access Control List Manager', (testEnv: TestEnv) => {
       true
     );
 
-    let tx = await aclManager.connect(flashBorrowAdmin.signer).addFlashBorrower(flashBorrower.address);
+    let tx = await aclManager
+      .connect(flashBorrowAdmin.signer)
+      .addFlashBorrower(flashBorrower.address);
     await tx.wait();
 
     expect(await aclManager.isFlashBorrower(flashBorrower.address)).to.be.eq(true);
@@ -132,8 +133,9 @@ makeSuite('Access Control List Manager', (testEnv: TestEnv) => {
     } = testEnv;
 
     expect(await aclManager.isPoolAdmin(poolAdmin.address)).to.be.eq(false);
-    let tx = await aclManager.connect(deployer.signer).addPoolAdmin(poolAdmin.address);
-    await tx.wait(5);
+    let tx = await waitForTx(
+      await aclManager.connect(deployer.signer).addPoolAdmin(poolAdmin.address)
+    );
     expect(await aclManager.isPoolAdmin(poolAdmin.address)).to.be.eq(true);
   });
 
@@ -144,7 +146,9 @@ makeSuite('Access Control List Manager', (testEnv: TestEnv) => {
     } = testEnv;
 
     expect(await aclManager.isEmergencyAdmin(emergencyAdmin.address)).to.be.eq(false);
-    await waitForTx(await aclManager.connect(deployer.signer).addEmergencyAdmin(emergencyAdmin.address));
+    await waitForTx(
+      await aclManager.connect(deployer.signer).addEmergencyAdmin(emergencyAdmin.address)
+    );
     expect(await aclManager.isEmergencyAdmin(emergencyAdmin.address)).to.be.eq(true);
   });
 
@@ -177,7 +181,9 @@ makeSuite('Access Control List Manager', (testEnv: TestEnv) => {
     } = testEnv;
 
     expect(await aclManager.isAssetListingAdmin(assetListingAdmin.address)).to.be.eq(false);
-    await waitForTx(await aclManager.connect(deployer.signer).addAssetListingAdmin(assetListingAdmin.address));
+    await waitForTx(
+      await aclManager.connect(deployer.signer).addAssetListingAdmin(assetListingAdmin.address)
+    );
     expect(await aclManager.isAssetListingAdmin(assetListingAdmin.address)).to.be.eq(true);
   });
 
@@ -191,7 +197,9 @@ makeSuite('Access Control List Manager', (testEnv: TestEnv) => {
       true
     );
 
-    await waitForTx(await aclManager.connect(flashBorrowAdmin.signer).removeFlashBorrower(flashBorrower.address));
+    await waitForTx(
+      await aclManager.connect(flashBorrowAdmin.signer).removeFlashBorrower(flashBorrower.address)
+    );
 
     expect(await aclManager.isFlashBorrower(flashBorrower.address)).to.be.eq(false);
     expect(await aclManager.hasRole(FLASH_BORROW_ADMIN_ROLE, flashBorrowAdmin.address)).to.be.eq(

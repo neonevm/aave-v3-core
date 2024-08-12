@@ -36,7 +36,7 @@ import { AaveOracle, ACLManager, StableDebtToken, VariableDebtToken } from '../.
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { usingTenderly } from '../../helpers/tenderly-utils';
 import { tEthereumAddress } from '../../helpers/types';
-
+import Report from '../../helpers/report';
 declare var hre: HardhatRuntimeEnvironment;
 
 export interface SignerWithAddress {
@@ -68,6 +68,7 @@ export interface TestEnv {
   addressesProvider: PoolAddressesProvider;
   registry: PoolAddressesProviderRegistry;
   aclManager: ACLManager;
+  report: Report;
 }
 
 let HardhatSnapshotId: string = '0x1';
@@ -99,6 +100,7 @@ const testEnv: TestEnv = {
   addressesProvider: {} as PoolAddressesProvider,
   registry: {} as PoolAddressesProviderRegistry,
   aclManager: {} as ACLManager,
+  report: {} as Report,
 } as TestEnv;
 
 export async function initializeMakeSuite() {
@@ -130,6 +132,8 @@ export async function initializeMakeSuite() {
   testEnv.aaveOracle = await getAaveOracle();
 
   testEnv.helpersContract = await getAaveProtocolDataProvider();
+
+  testEnv.report = new Report('AAVE-v3-core');
 
   const allTokens = await testEnv.helpersContract.getAllATokens();
   const aDaiAddress = allTokens.find((aToken) => aToken.symbol.includes('DAI'))?.tokenAddress;
@@ -197,17 +201,20 @@ const revertHead = async () => {
     await hre.tenderlyNetwork.setHead(HardhatSnapshotId);
     return;
   }
- // await evmRevert(HardhatSnapshotId);
+  // await evmRevert(HardhatSnapshotId);
 };
 
 export function makeSuite(name: string, tests: (testEnv: TestEnv) => void) {
   describe(name, () => {
     before(async () => {
-     // await setSnapshot();
+      // await setSnapshot();
     });
     tests(testEnv);
     // after(async () => {
     //   await revertHead();
     // });
+    after(async () => {
+      testEnv.report.saveToJSON('aave-v3-core');
+    });
   });
 }

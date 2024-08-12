@@ -42,7 +42,7 @@ makeSuite('AToken: Edge cases', (testEnv: TestEnv) => {
         )
     );
     await waitForTx(await dai.connect(users[0].signer).approve(pool.address, MAX_UINT_AMOUNT));
-    await waitForTx(
+    let tx = await waitForTx(
       await pool
         .connect(users[0].signer)
         .deposit(
@@ -52,6 +52,13 @@ makeSuite('AToken: Edge cases', (testEnv: TestEnv) => {
           0
         )
     );
+    testEnv.report.addAction(
+      'AToken deposit',
+      tx.gasUsed.toNumber(),
+      tx.effectiveGasPrice,
+      tx.transactionHash
+    );
+
     const scaledUserBalanceAndSupplyAfter = await aDai.getScaledUserBalanceAndSupply(
       users[0].address
     );
