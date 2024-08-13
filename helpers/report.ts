@@ -12,6 +12,9 @@ class Report {
   }
 
   addAction(name: string, usedGas: number, gasPrice: number | BigNumber, tx: string): void {
+    if (gasPrice instanceof BigNumber) {
+      gasPrice = gasPrice.toNumber();
+    }
     this.actions.push({
       name: name,
       usedGas: usedGas,
