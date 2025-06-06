@@ -9,10 +9,10 @@ describe('ReserveConfiguration', async () => {
   let snap: string;
 
   beforeEach(async () => {
-   // snap = await evmSnapshot();
+    // snap = await evmSnapshot();
   });
   afterEach(async () => {
-   // await evmRevert(snap);
+    // await evmRevert(snap);
   });
 
   let configMock: MockReserveConfiguration;

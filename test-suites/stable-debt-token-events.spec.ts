@@ -124,7 +124,7 @@ makeSuite('StableDebtToken: Events', (testEnv: TestEnv) => {
   });
 
   beforeEach(async () => {
-   // snapId = await evmSnapshot();
+    // snapId = await evmSnapshot();
 
     // Init balances
     balances = {
@@ -136,7 +136,7 @@ makeSuite('StableDebtToken: Events', (testEnv: TestEnv) => {
   });
 
   afterEach(async () => {
-   // await evmRevert(snapId);
+    // await evmRevert(snapId);
   });
 
   it.skip('Alice borrows 100 DAI, borrows 50 DAI, repays 20 DAI, repays 10 DAI, borrows 100 DAI, repays 220 DAI (without index change)', async () => {

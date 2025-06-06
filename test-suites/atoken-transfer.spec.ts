@@ -168,7 +168,9 @@ makeSuite('AToken: Transfer', (testEnv: TestEnv) => {
         .deposit(dai.address, amountDAItoDeposit, users[0].address, '0')
     );
 
-    await waitForTx(await aDai.connect(users[0].signer).transfer(users[1].address, amountDAItoDeposit));
+    await waitForTx(
+      await aDai.connect(users[0].signer).transfer(users[1].address, amountDAItoDeposit)
+    );
     const name = await aDai.name();
 
     expect(name).to.be.equal('Aave Testnet DAI');

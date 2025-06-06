@@ -1,4 +1,4 @@
-import { evmSnapshot, evmRevert, waitForTx} from '@aave/deploy-v3';
+import { evmSnapshot, evmRevert, waitForTx } from '@aave/deploy-v3';
 import { expect } from 'chai';
 import { BigNumber, utils } from 'ethers';
 import { HARDHAT_CHAINID, MAX_UINT_AMOUNT, ZERO_ADDRESS } from '../helpers/constants';
@@ -22,7 +22,7 @@ makeSuite('DebtToken: Permit Delegation', (testEnv: TestEnv) => {
     //snapId = await evmSnapshot();
   });
   afterEach(async () => {
-  //  await evmRevert(snapId);
+    //  await evmRevert(snapId);
   });
 
   let daiMintedAmount: BigNumber;
@@ -47,7 +47,7 @@ makeSuite('DebtToken: Permit Delegation', (testEnv: TestEnv) => {
     wethMintedAmount = await convertToCurrencyDecimals(weth.address, MINT_AMOUNT);
 
     await waitForTx(await dai['mint(uint256)'](daiMintedAmount));
-    await waitForTx((await dai.approve(pool.address, daiMintedAmount)));
+    await waitForTx(await dai.approve(pool.address, daiMintedAmount));
     await waitForTx(await pool.deposit(dai.address, daiMintedAmount, user1.address, 0));
     await waitForTx(
       await weth.connect(user2.signer)['mint(address,uint256)'](user2.address, wethMintedAmount)
@@ -126,7 +126,9 @@ makeSuite('DebtToken: Permit Delegation', (testEnv: TestEnv) => {
       (await variableDebtDai.borrowAllowance(user2.address, user3.address)).toString()
     ).to.be.equal(permitAmount);
 
-    await waitForTx(await pool.connect(user3.signer).borrow(dai.address, permitAmount, 2, 0, user2.address));
+    await waitForTx(
+      await pool.connect(user3.signer).borrow(dai.address, permitAmount, 2, 0, user2.address)
+    );
     expect(
       (await variableDebtDai.borrowAllowance(user2.address, user3.address)).toString()
     ).to.be.equal('0');

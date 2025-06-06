@@ -48,34 +48,44 @@ makeSuite('StableDebtToken', (testEnv: TestEnv) => {
     expect(totSupplyAndRateBefore[1].toString()).to.be.eq('0');
 
     // Need to create some debt to do this good
-    await waitForTx(await dai
-      .connect(users[0].signer)
-      ['mint(uint256)'](await convertToCurrencyDecimals(dai.address, '1000')));
+    await waitForTx(
+      await dai
+        .connect(users[0].signer)
+        ['mint(uint256)'](await convertToCurrencyDecimals(dai.address, '1000'))
+    );
     await waitForTx(await dai.connect(users[0].signer).approve(pool.address, MAX_UINT_AMOUNT));
-    await waitForTx(await pool
-      .connect(users[0].signer)
-      .deposit(
-        dai.address,
-        await convertToCurrencyDecimals(dai.address, '1000'),
-        users[0].address,
-        0
-      ));
-    await waitForTx(await weth
-      .connect(users[1].signer)
-      ['mint(address,uint256)'](users[1].address, utils.parseEther('10')));
+    await waitForTx(
+      await pool
+        .connect(users[0].signer)
+        .deposit(
+          dai.address,
+          await convertToCurrencyDecimals(dai.address, '1000'),
+          users[0].address,
+          0
+        )
+    );
+    await waitForTx(
+      await weth
+        .connect(users[1].signer)
+        ['mint(address,uint256)'](users[1].address, utils.parseEther('10'))
+    );
     await waitForTx(await weth.connect(users[1].signer).approve(pool.address, MAX_UINT_AMOUNT));
-    await waitForTx(await pool
-      .connect(users[1].signer)
-      .deposit(weth.address, utils.parseEther('10'), users[1].address, 0));
-    await waitForTx(await pool
-      .connect(users[1].signer)
-      .borrow(
-        dai.address,
-        await convertToCurrencyDecimals(dai.address, '200'),
-        RateMode.Stable,
-        0,
-        users[1].address
-      ));
+    await waitForTx(
+      await pool
+        .connect(users[1].signer)
+        .deposit(weth.address, utils.parseEther('10'), users[1].address, 0)
+    );
+    await waitForTx(
+      await pool
+        .connect(users[1].signer)
+        .borrow(
+          dai.address,
+          await convertToCurrencyDecimals(dai.address, '200'),
+          RateMode.Stable,
+          0,
+          users[1].address
+        )
+    );
 
     const totSupplyAndRateAfter = await stableDebtContract.getTotalSupplyAndAvgRate();
     expect(totSupplyAndRateAfter[0]).to.be.gt(0);
@@ -329,7 +339,9 @@ makeSuite('StableDebtToken', (testEnv: TestEnv) => {
     await waitForTx(await aclManager.connect(deployer.signer).addPoolAdmin(poolAdmin.address));
 
     expect(await stableDebt.getIncentivesController()).to.not.be.eq(ZERO_ADDRESS);
-    await waitForTx(await stableDebt.connect(poolAdmin.signer).setIncentivesController(ZERO_ADDRESS));
+    await waitForTx(
+      await stableDebt.connect(poolAdmin.signer).setIncentivesController(ZERO_ADDRESS)
+    );
     expect(await stableDebt.getIncentivesController()).to.be.eq(ZERO_ADDRESS);
 
     // await evmRevert(snapshot);

@@ -9,7 +9,7 @@ import {
   evmRevert,
   MockFlashLoanReceiver,
   getMockFlashLoanReceiver,
-  waitForTx
+  waitForTx,
 } from '@aave/deploy-v3';
 import './helpers/utils/wadraymath';
 
@@ -89,25 +89,29 @@ makeSuite('Pool: liquidity indexes misc tests', (testEnv: TestEnv) => {
 
     const wethFlashBorrowedAmount = ethers.utils.parseEther('0.8');
 
-    await waitForTx(await pool.flashLoan(
-      _mockFlashLoanReceiver.address,
-      [weth.address],
-      [wethFlashBorrowedAmount],
-      [0],
-      _mockFlashLoanReceiver.address,
-      '0x10',
-      '0'
-    ));
+    await waitForTx(
+      await pool.flashLoan(
+        _mockFlashLoanReceiver.address,
+        [weth.address],
+        [wethFlashBorrowedAmount],
+        [0],
+        _mockFlashLoanReceiver.address,
+        '0x10',
+        '0'
+      )
+    );
 
-    await waitForTx(await pool.flashLoan(
-      _mockFlashLoanReceiver.address,
-      [weth.address],
-      [wethFlashBorrowedAmount],
-      [0],
-      _mockFlashLoanReceiver.address,
-      '0x10',
-      '0'
-    ));
+    await waitForTx(
+      await pool.flashLoan(
+        _mockFlashLoanReceiver.address,
+        [weth.address],
+        [wethFlashBorrowedAmount],
+        [0],
+        _mockFlashLoanReceiver.address,
+        '0x10',
+        '0'
+      )
+    );
 
     const wethReserveDataAfterSecondFlash = await helpersContract.getReserveData(weth.address);
 

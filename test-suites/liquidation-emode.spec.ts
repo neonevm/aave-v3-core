@@ -25,7 +25,7 @@ makeSuite('Pool Liquidation: Liquidates borrows in eMode with price change', (te
   before(async () => {
     const { addressesProvider, oracle } = testEnv;
     await waitForTx(await addressesProvider.setPriceOracle(oracle.address));
-   // snap = await evmSnapshot();
+    // snap = await evmSnapshot();
   });
 
   after(async () => {
@@ -87,7 +87,9 @@ makeSuite('Pool Liquidation: Liquidates borrows in eMode with price change', (te
     await waitForTx(await dai.connect(daiFunder.signer)['mint(uint256)'](supplyAmount));
     await waitForTx(await dai.connect(daiFunder.signer).approve(pool.address, MAX_UINT_AMOUNT));
 
-    await waitForTx(await pool.connect(daiFunder.signer).supply(dai.address, supplyAmount, daiFunder.address, 0));
+    await waitForTx(
+      await pool.connect(daiFunder.signer).supply(dai.address, supplyAmount, daiFunder.address, 0)
+    );
   });
 
   it.skip('Deposit USDC with eMode', async () => {
@@ -97,12 +99,16 @@ makeSuite('Pool Liquidation: Liquidates borrows in eMode with price change', (te
       usdc,
     } = testEnv;
 
-    await waitForTx(await usdc.connect(depositor.signer)['mint(uint256)'](utils.parseUnits('10000', 6)));
+    await waitForTx(
+      await usdc.connect(depositor.signer)['mint(uint256)'](utils.parseUnits('10000', 6))
+    );
     await waitForTx(await usdc.connect(depositor.signer).approve(pool.address, MAX_UINT_AMOUNT));
 
-    await waitForTx(await pool
-      .connect(depositor.signer)
-      .supply(usdc.address, utils.parseUnits('10000', 6), depositor.address, 0));
+    await waitForTx(
+      await pool
+        .connect(depositor.signer)
+        .supply(usdc.address, utils.parseUnits('10000', 6), depositor.address, 0)
+    );
 
     await waitForTx(await pool.connect(depositor.signer).setUserEMode(CATEGORY.id));
     expect(await pool.getUserEMode(depositor.address)).to.be.eq(CATEGORY.id);
@@ -124,9 +130,11 @@ makeSuite('Pool Liquidation: Liquidates borrows in eMode with price change', (te
       userGlobalData.availableBorrowsBase.div(daiPrice).toString()
     );
 
-    await waitForTx(await pool
-      .connect(depositor.signer)
-      .borrow(dai.address, amountDAIToBorrow, RateMode.Variable, 0, depositor.address));
+    await waitForTx(
+      await pool
+        .connect(depositor.signer)
+        .borrow(dai.address, amountDAIToBorrow, RateMode.Variable, 0, depositor.address)
+    );
   });
 
   it.skip('Drop HF below 1', async () => {
@@ -142,15 +150,19 @@ makeSuite('Pool Liquidation: Liquidates borrows in eMode with price change', (te
     const userGlobalDataBefore = await pool.getUserAccountData(depositor.address);
     expect(userGlobalDataBefore.healthFactor).to.be.gt(utils.parseUnits('1', 18));
 
-    await waitForTx(await oracle.setAssetPrice(
-      dai.address,
-      daiPrice.mul(userGlobalDataBefore.healthFactor).div(utils.parseUnits('1', 18))
-    ));
+    await waitForTx(
+      await oracle.setAssetPrice(
+        dai.address,
+        daiPrice.mul(userGlobalDataBefore.healthFactor).div(utils.parseUnits('1', 18))
+      )
+    );
 
     const userGlobalDataMid = await pool.getUserAccountData(depositor.address);
     expect(userGlobalDataMid.healthFactor).to.be.gt(utils.parseUnits('1', 18));
 
-    await waitForTx(await oracle.setAssetPrice(dai.address, (await oracle.getAssetPrice(dai.address)).add(1)));
+    await waitForTx(
+      await oracle.setAssetPrice(dai.address, (await oracle.getAssetPrice(dai.address)).add(1))
+    );
 
     const userGlobalDataAfter = await pool.getUserAccountData(depositor.address);
     expect(userGlobalDataAfter.healthFactor).to.be.lt(utils.parseUnits('1', 18), INVALID_HF);

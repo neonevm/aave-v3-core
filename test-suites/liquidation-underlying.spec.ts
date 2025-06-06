@@ -409,9 +409,11 @@ makeSuite('Pool Liquidation: Liquidator receiving the underlying asset', (testEn
     } = testEnv;
 
     //mints AAVE to borrower
-   await waitForTx(await aave
-      .connect(borrower.signer)
-      ['mint(uint256)'](await convertToCurrencyDecimals(aave.address, '0.033')));
+    await waitForTx(
+      await aave
+        .connect(borrower.signer)
+        ['mint(uint256)'](await convertToCurrencyDecimals(aave.address, '0.033'))
+    );
 
     //approve protocol to access the borrower wallet
     await waitForTx(await aave.connect(borrower.signer).approve(pool.address, MAX_UINT_AMOUNT));
@@ -419,18 +421,22 @@ makeSuite('Pool Liquidation: Liquidator receiving the underlying asset', (testEn
     //borrower deposits 1 AAVE
     const amountToDeposit = await convertToCurrencyDecimals(aave.address, '0.033');
 
-    await waitForTx(await pool
-      .connect(borrower.signer)
-      .deposit(aave.address, amountToDeposit, borrower.address, '0'));
+    await waitForTx(
+      await pool
+        .connect(borrower.signer)
+        .deposit(aave.address, amountToDeposit, borrower.address, '0')
+    );
     const usdcPrice = await oracle.getAssetPrice(usdc.address);
 
     //drops HF below 1
     await waitForTx(await oracle.setAssetPrice(usdc.address, usdcPrice.percentMul(11400)));
 
     //mints usdc to the liquidator
-    await waitForTx(await usdc
-      .connect(liquidator.signer)
-      ['mint(uint256)'](await convertToCurrencyDecimals(usdc.address, '1000')));
+    await waitForTx(
+      await usdc
+        .connect(liquidator.signer)
+        ['mint(uint256)'](await convertToCurrencyDecimals(usdc.address, '1000'))
+    );
 
     //approve protocol to access liquidator wallet
     await waitForTx(await usdc.connect(liquidator.signer).approve(pool.address, MAX_UINT_AMOUNT));
@@ -448,9 +454,11 @@ makeSuite('Pool Liquidation: Liquidator receiving the underlying asset', (testEn
     const collateralPrice = await oracle.getAssetPrice(aave.address);
     const principalPrice = await oracle.getAssetPrice(usdc.address);
 
-    await waitForTx(await pool
-      .connect(liquidator.signer)
-      .liquidationCall(aave.address, usdc.address, borrower.address, amountToLiquidate, false));
+    await waitForTx(
+      await pool
+        .connect(liquidator.signer)
+        .liquidationCall(aave.address, usdc.address, borrower.address, amountToLiquidate, false)
+    );
 
     const userReserveDataAfter = await helpersContract.getUserReserveData(
       usdc.address,

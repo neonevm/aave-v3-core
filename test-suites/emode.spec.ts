@@ -6,7 +6,13 @@ import { convertToCurrencyDecimals } from '../helpers/contracts-helpers';
 import { makeSuite, TestEnv } from './helpers/make-suite';
 import './helpers/utils/wadraymath';
 import { parseUnits, formatUnits, parseEther } from '@ethersproject/units';
-import { evmSnapshot, evmRevert, VariableDebtToken__factory, aave, waitForTx} from '@aave/deploy-v3';
+import {
+  evmSnapshot,
+  evmRevert,
+  VariableDebtToken__factory,
+  aave,
+  waitForTx,
+} from '@aave/deploy-v3';
 
 makeSuite('EfficiencyMode', (testEnv: TestEnv) => {
   const {
@@ -52,9 +58,13 @@ makeSuite('EfficiencyMode', (testEnv: TestEnv) => {
 
     await waitForTx(await dai.connect(user0.signer)['mint(uint256)'](mintAmount));
     await waitForTx(await usdc.connect(user0.signer)['mint(uint256)'](mintAmount));
-    await waitForTx(await weth.connect(user0.signer)['mint(address,uint256)'](user0.address, mintAmount));
+    await waitForTx(
+      await weth.connect(user0.signer)['mint(address,uint256)'](user0.address, mintAmount)
+    );
     await waitForTx(await usdc.connect(user1.signer)['mint(uint256)'](mintAmount));
-    await waitForTx(await weth.connect(user1.signer)['mint(address,uint256)'](user1.address, mintAmount));
+    await waitForTx(
+      await weth.connect(user1.signer)['mint(address,uint256)'](user1.address, mintAmount)
+    );
     await waitForTx(await dai.connect(user2.signer)['mint(uint256)'](mintAmount));
 
     await waitForTx(await dai.connect(user0.signer).approve(pool.address, MAX_UINT_AMOUNT));
@@ -65,7 +75,7 @@ makeSuite('EfficiencyMode', (testEnv: TestEnv) => {
     await waitForTx(await weth.connect(user1.signer).approve(pool.address, MAX_UINT_AMOUNT));
     await waitForTx(await dai.connect(user2.signer).approve(pool.address, MAX_UINT_AMOUNT));
 
-   // snapSetup = await evmSnapshot();
+    // snapSetup = await evmSnapshot();
   });
 
   it('Admin adds a category for stablecoins with DAI and USDC', async () => {
@@ -76,8 +86,12 @@ makeSuite('EfficiencyMode', (testEnv: TestEnv) => {
     await waitForTx(
       await configurator.connect(poolAdmin.signer).setEModeCategory(id, ltv, lt, lb, oracle, label)
     );
-    await waitForTx(await configurator.connect(poolAdmin.signer).setAssetEModeCategory(dai.address, id));
-    await waitForTx(await configurator.connect(poolAdmin.signer).setAssetEModeCategory(usdc.address, id));
+    await waitForTx(
+      await configurator.connect(poolAdmin.signer).setAssetEModeCategory(dai.address, id)
+    );
+    await waitForTx(
+      await configurator.connect(poolAdmin.signer).setAssetEModeCategory(usdc.address, id)
+    );
 
     expect(await helpersContract.getReserveEModeCategory(dai.address)).to.be.eq(id);
     expect(await helpersContract.getReserveEModeCategory(usdc.address)).to.be.eq(id);
@@ -91,7 +105,9 @@ makeSuite('EfficiencyMode', (testEnv: TestEnv) => {
     await waitForTx(
       await configurator.connect(poolAdmin.signer).setEModeCategory(id, ltv, lt, lb, oracle, label)
     );
-    await waitForTx(await configurator.connect(poolAdmin.signer).setAssetEModeCategory(weth.address, id));
+    await waitForTx(
+      await configurator.connect(poolAdmin.signer).setAssetEModeCategory(weth.address, id)
+    );
 
     expect(await helpersContract.getReserveEModeCategory(weth.address)).to.be.eq(id);
   });
@@ -810,7 +826,9 @@ makeSuite('EfficiencyMode', (testEnv: TestEnv) => {
   it('Remove DAI from stablecoin eMode category', async () => {
     const { configurator, poolAdmin, dai, helpersContract } = testEnv;
     expect(await helpersContract.getReserveEModeCategory(dai.address)).to.not.be.eq(0);
-    await waitForTx(await configurator.connect(poolAdmin.signer).setAssetEModeCategory(dai.address, 0));
+    await waitForTx(
+      await configurator.connect(poolAdmin.signer).setAssetEModeCategory(dai.address, 0)
+    );
     expect(await helpersContract.getReserveEModeCategory(dai.address)).to.be.eq(0);
   });
 

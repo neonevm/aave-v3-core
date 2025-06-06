@@ -51,9 +51,11 @@ const setupPositions = async (testEnv: TestEnv, borrowingMode: RateMode) => {
   } = testEnv;
 
   // mints DAI to depositor
-  await waitForTx(await dai
-    .connect(depositor.signer)
-    ['mint(uint256)'](await convertToCurrencyDecimals(dai.address, '20000')));
+  await waitForTx(
+    await dai
+      .connect(depositor.signer)
+      ['mint(uint256)'](await convertToCurrencyDecimals(dai.address, '20000'))
+  );
 
   // approve protocol to access depositor wallet
   await waitForTx(await dai.connect(depositor.signer).approve(pool.address, MAX_UINT_AMOUNT));
@@ -61,26 +63,32 @@ const setupPositions = async (testEnv: TestEnv, borrowingMode: RateMode) => {
   // user 1 deposits 1000 DAI
   const amountDAItoDeposit = await convertToCurrencyDecimals(dai.address, '10000');
 
-  await waitForTx(await pool
-    .connect(depositor.signer)
-    .deposit(dai.address, amountDAItoDeposit, depositor.address, '0'));
+  await waitForTx(
+    await pool
+      .connect(depositor.signer)
+      .deposit(dai.address, amountDAItoDeposit, depositor.address, '0')
+  );
   // user 2 deposits 1 ETH
   const amountETHtoDeposit = await convertToCurrencyDecimals(weth.address, '1');
 
   // mints WETH to borrower
-  await waitForTx(await weth
-    .connect(borrower.signer)
-    ['mint(address,uint256)'](
-      borrower.address,
-      await convertToCurrencyDecimals(weth.address, '1000')
-    ));
+  await waitForTx(
+    await weth
+      .connect(borrower.signer)
+      ['mint(address,uint256)'](
+        borrower.address,
+        await convertToCurrencyDecimals(weth.address, '1000')
+      )
+  );
 
   // approve protocol to access the borrower wallet
   await waitForTx(await weth.connect(borrower.signer).approve(pool.address, MAX_UINT_AMOUNT));
 
-  await waitForTx(await pool
-    .connect(borrower.signer)
-    .deposit(weth.address, amountETHtoDeposit, borrower.address, '0'));
+  await waitForTx(
+    await pool
+      .connect(borrower.signer)
+      .deposit(weth.address, amountETHtoDeposit, borrower.address, '0')
+  );
 
   //user 2 borrows
 
@@ -91,9 +99,11 @@ const setupPositions = async (testEnv: TestEnv, borrowingMode: RateMode) => {
     dai.address,
     userGlobalData.availableBorrowsBase.div(daiPrice).mul(5000).div(10000).toString()
   );
-  await waitForTx(await pool
-    .connect(borrower.signer)
-    .borrow(dai.address, amountDAIToBorrow, borrowingMode, '0', borrower.address));
+  await waitForTx(
+    await pool
+      .connect(borrower.signer)
+      .borrow(dai.address, amountDAIToBorrow, borrowingMode, '0', borrower.address)
+  );
 };
 
 makeSuite('Pool: Edge cases', (testEnv: TestEnv) => {
@@ -332,7 +342,9 @@ makeSuite('Pool: Edge cases', (testEnv: TestEnv) => {
     const { pool, poolAdmin, dai, users, configurator } = testEnv;
 
     // Deactivate reserve
-    await waitForTx(await configurator.connect(poolAdmin.signer).setReserveActive(dai.address, false));
+    await waitForTx(
+      await configurator.connect(poolAdmin.signer).setReserveActive(dai.address, false)
+    );
 
     // MintToTreasury
     await waitForTx(await pool.connect(users[0].signer).mintToTreasury([dai.address]));
@@ -575,7 +587,7 @@ makeSuite('Pool: Edge cases', (testEnv: TestEnv) => {
         assetData.currentVariableBorrowRate.eq(0)
       ) {
         tx = await configurator.connect(poolAdmin.signer).dropReserve(reserveAsset);
-        await tx.wait(5)
+        await tx.wait(5);
         dropped++;
       }
     }

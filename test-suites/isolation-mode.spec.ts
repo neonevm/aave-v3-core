@@ -95,7 +95,9 @@ makeSuite('Isolation mode', (testEnv: TestEnv) => {
     const { users, pool, dai } = testEnv;
     await waitForTx(await dai.connect(users[0].signer)['mint(uint256)'](depositAmount));
     await waitForTx(await dai.connect(users[0].signer).approve(pool.address, MAX_UINT_AMOUNT));
-    await waitForTx(await pool.connect(users[0].signer).supply(dai.address, depositAmount, users[0].address, 0));
+    await waitForTx(
+      await pool.connect(users[0].signer).supply(dai.address, depositAmount, users[0].address, 0)
+    );
   });
 
   it('User 1 supply 2 aave. Checks that aave is not activated as collateral.', async () => {
@@ -103,9 +105,11 @@ makeSuite('Isolation mode', (testEnv: TestEnv) => {
     const { users, pool, aave, helpersContract } = testEnv;
     await waitForTx(await aave.connect(users[1].signer)['mint(uint256)'](utils.parseEther('2')));
     await waitForTx(await aave.connect(users[1].signer).approve(pool.address, MAX_UINT_AMOUNT));
-    await waitForTx(await pool
-      .connect(users[1].signer)
-      .supply(aave.address, utils.parseEther('2'), users[1].address, 0));
+    await waitForTx(
+      await pool
+        .connect(users[1].signer)
+        .supply(aave.address, utils.parseEther('2'), users[1].address, 0)
+    );
     const userData = await helpersContract.getUserReserveData(aave.address, users[1].address);
 
     expect(userData.usageAsCollateralEnabled).to.be.eq(false);
@@ -278,7 +282,9 @@ makeSuite('Isolation mode', (testEnv: TestEnv) => {
     const amount = utils.parseEther('100');
     await waitForTx(await dai.connect(users[2].signer)['mint(uint256)'](amount));
     await waitForTx(await dai.connect(users[2].signer).approve(pool.address, MAX_UINT_AMOUNT));
-    await waitForTx(await pool.connect(users[2].signer).supply(dai.address, amount, users[2].address, 0));
+    await waitForTx(
+      await pool.connect(users[2].signer).supply(dai.address, amount, users[2].address, 0)
+    );
 
     await waitForTx(await aDai.connect(users[2].signer).transfer(users[1].address, amount));
 
@@ -290,21 +296,31 @@ makeSuite('Isolation mode', (testEnv: TestEnv) => {
   it.skip('User 1 withdraws everything. User supplies WETH then AAVE. Checks AAVE is not enabled as collateral', async () => {
     const { dai, aave, weth, users, pool, helpersContract } = testEnv;
 
-    await waitForTx(await pool
-      .connect(users[1].signer)
-      .withdraw(weth.address, utils.parseEther('1'), users[1].address));
+    await waitForTx(
+      await pool
+        .connect(users[1].signer)
+        .withdraw(weth.address, utils.parseEther('1'), users[1].address)
+    );
 
-    await waitForTx(await pool
-      .connect(users[1].signer)
-      .withdraw(aave.address, utils.parseEther('2'), users[1].address));
+    await waitForTx(
+      await pool
+        .connect(users[1].signer)
+        .withdraw(aave.address, utils.parseEther('2'), users[1].address)
+    );
 
-    await waitForTx(await pool.connect(users[1].signer).withdraw(dai.address, MAX_UINT_AMOUNT, users[1].address));
+    await waitForTx(
+      await pool.connect(users[1].signer).withdraw(dai.address, MAX_UINT_AMOUNT, users[1].address)
+    );
 
     const amount = utils.parseEther('1');
 
-    await waitForTx(await pool.connect(users[1].signer).supply(weth.address, amount, users[1].address, 0));
+    await waitForTx(
+      await pool.connect(users[1].signer).supply(weth.address, amount, users[1].address, 0)
+    );
 
-    await waitForTx(await pool.connect(users[1].signer).supply(aave.address, amount, users[1].address, 0));
+    await waitForTx(
+      await pool.connect(users[1].signer).supply(aave.address, amount, users[1].address, 0)
+    );
 
     const userData = await helpersContract.getUserReserveData(aave.address, users[1].address);
 
@@ -316,7 +332,9 @@ makeSuite('Isolation mode', (testEnv: TestEnv) => {
 
     const amount = utils.parseEther('100');
     await waitForTx(await dai.connect(users[2].signer)['mint(uint256)'](amount));
-    await waitForTx(await pool.connect(users[2].signer).supply(dai.address, amount, users[2].address, 0));
+    await waitForTx(
+      await pool.connect(users[2].signer).supply(dai.address, amount, users[2].address, 0)
+    );
 
     await waitForTx(await aDai.connect(users[2].signer).transfer(users[1].address, amount));
 
@@ -515,19 +533,27 @@ makeSuite('Isolation mode', (testEnv: TestEnv) => {
     const { weth, dai, aave, aAave, users, pool, helpersContract } = testEnv;
 
     const wethAmount = utils.parseEther('1');
-    await waitForTx(await weth.connect(users[5].signer)['mint(address,uint256)'](users[5].address, wethAmount));
+    await waitForTx(
+      await weth.connect(users[5].signer)['mint(address,uint256)'](users[5].address, wethAmount)
+    );
     await waitForTx(await weth.connect(users[5].signer).approve(pool.address, MAX_UINT_AMOUNT));
-    await waitForTx(await pool.connect(users[5].signer).supply(weth.address, wethAmount, users[5].address, 0));
+    await waitForTx(
+      await pool.connect(users[5].signer).supply(weth.address, wethAmount, users[5].address, 0)
+    );
 
     const daiAmount = utils.parseEther('100');
     await waitForTx(await dai.connect(users[5].signer)['mint(uint256)'](daiAmount));
     await waitForTx(await dai.connect(users[5].signer).approve(pool.address, MAX_UINT_AMOUNT));
-    await waitForTx(await pool.connect(users[5].signer).supply(dai.address, daiAmount, users[5].address, 0));
+    await waitForTx(
+      await pool.connect(users[5].signer).supply(dai.address, daiAmount, users[5].address, 0)
+    );
 
     const aaveAmount = utils.parseEther('100');
     await waitForTx(await aave.connect(users[6].signer)['mint(uint256)'](aaveAmount));
     await waitForTx(await aave.connect(users[6].signer).approve(pool.address, MAX_UINT_AMOUNT));
-    await waitForTx(await pool.connect(users[6].signer).supply(aave.address, aaveAmount, users[6].address, 0));
+    await waitForTx(
+      await pool.connect(users[6].signer).supply(aave.address, aaveAmount, users[6].address, 0)
+    );
     await waitForTx(await aAave.connect(users[6].signer).transfer(users[5].address, aaveAmount));
 
     const wethUserData = await helpersContract.getUserReserveData(weth.address, users[5].address);

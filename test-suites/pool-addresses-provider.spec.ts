@@ -70,7 +70,7 @@ makeSuite('PoolAddressesProvider', (testEnv: TestEnv) => {
     const proxyAddress = await addressesProvider.getAddress(proxiedAddressId);
     //const implAddress = await getProxyImplementation(addressesProvider.address, proxyAddress);
     //expect(implAddress).to.be.eq(mockPool.address);
-    expect (proxyAddress).to.be.not.eq(ZERO_ADDRESS)
+    expect(proxyAddress).to.be.not.eq(ZERO_ADDRESS);
   });
 
   it.skip('Owner adds a new address with no proxy', async () => {

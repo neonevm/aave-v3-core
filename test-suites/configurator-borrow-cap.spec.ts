@@ -198,15 +198,14 @@ makeSuite('PoolConfigurator: Borrow Cap', (testEnv: TestEnv) => {
     const { usdc, pool, dai, deployer } = testEnv;
 
     const borrowedAmount = '10';
-    let tx = 
-      await pool.borrow(
-        usdc.address,
-        await convertToCurrencyDecimals(usdc.address, borrowedAmount),
-        2,
-        0,
-        deployer.address
-      );
-      await tx.wait();
+    let tx = await pool.borrow(
+      usdc.address,
+      await convertToCurrencyDecimals(usdc.address, borrowedAmount),
+      2,
+      0,
+      deployer.address
+    );
+    await tx.wait();
 
     tx = expect(
       await pool.borrow(
@@ -219,8 +218,6 @@ makeSuite('PoolConfigurator: Borrow Cap', (testEnv: TestEnv) => {
     );
     await tx.wait();
   });
-
-
 
   it.skip('Sets the borrow cap for WETH to 2 Units', async () => {
     const { configurator, weth, helpersContract } = testEnv;

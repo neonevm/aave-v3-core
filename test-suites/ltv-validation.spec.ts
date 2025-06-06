@@ -33,13 +33,21 @@ makeSuite('LTV validation', (testEnv: TestEnv) => {
 
     await waitForTx(await dai.connect(user1.signer)['mint(uint256)'](daiAmount));
     await waitForTx(await usdc.connect(user1.signer)['mint(uint256)'](usdcAmount));
-    await waitForTx(await weth.connect(user2.signer)['mint(address,uint256)'](user2.address, wethAmount));
+    await waitForTx(
+      await weth.connect(user2.signer)['mint(address,uint256)'](user2.address, wethAmount)
+    );
 
-    await waitForTx(await pool.connect(user1.signer).deposit(dai.address, daiAmount, user1.address, 0));
+    await waitForTx(
+      await pool.connect(user1.signer).deposit(dai.address, daiAmount, user1.address, 0)
+    );
 
-    await waitForTx(await pool.connect(user1.signer).deposit(usdc.address, usdcAmount, user1.address, 0));
+    await waitForTx(
+      await pool.connect(user1.signer).deposit(usdc.address, usdcAmount, user1.address, 0)
+    );
 
-    await waitForTx(await pool.connect(user2.signer).deposit(weth.address, wethAmount, user2.address, 0));
+    await waitForTx(
+      await pool.connect(user2.signer).deposit(weth.address, wethAmount, user2.address, 0)
+    );
   });
 
   it.skip('Sets the LTV of DAI to 0', async () => {

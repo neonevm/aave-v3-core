@@ -144,7 +144,9 @@ makeSuite('BridgeLogic: Testing with borrows', (testEnv: TestEnv) => {
 
   it.skip('RiskAdmin updates the unbackedMintCap to 100 aDai (0 left) and user 1 tries to perform fast withdraw 1 aDai from L2 (revert expected)', async () => {
     const { users, riskAdmin, pool, configurator, dai } = testEnv;
-    await waitForTx(await configurator.connect(riskAdmin.signer).setUnbackedMintCap(dai.address, '100'));
+    await waitForTx(
+      await configurator.connect(riskAdmin.signer).setUnbackedMintCap(dai.address, '100')
+    );
     await expect(
       pool.connect(users[2].signer).mintUnbacked(dai.address, mintAmount, users[0].address, 0)
     ).to.be.revertedWith(UNBACKED_MINT_CAP_EXCEEDED);
