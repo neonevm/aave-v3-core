@@ -126,22 +126,30 @@ makeSuite('Interest Rate and Index Overflow', (testEnv) => {
     ];
 
     const i = 0;
-    await waitForTx(await configurator
-      .connect(poolAdmin.signer)
-      .configureReserveAsCollateral(
-        inputParams[i].asset,
-        inputParams[i].baseLTV,
-        inputParams[i].liquidationThreshold,
-        inputParams[i].liquidationBonus
-      ));
-    await waitForTx(await configurator.connect(poolAdmin.signer).setReserveBorrowing(inputParams[i].asset, true));
+    await waitForTx(
+      await configurator
+        .connect(poolAdmin.signer)
+        .configureReserveAsCollateral(
+          inputParams[i].asset,
+          inputParams[i].baseLTV,
+          inputParams[i].liquidationThreshold,
+          inputParams[i].liquidationBonus
+        )
+    );
+    await waitForTx(
+      await configurator.connect(poolAdmin.signer).setReserveBorrowing(inputParams[i].asset, true)
+    );
 
-    await waitForTx(await configurator
-      .connect(poolAdmin.signer)
-      .setSupplyCap(inputParams[i].asset, inputParams[i].supplyCap));
-    await waitForTx(await configurator
-      .connect(poolAdmin.signer)
-      .setReserveFactor(inputParams[i].asset, inputParams[i].reserveFactor));
+    await waitForTx(
+      await configurator
+        .connect(poolAdmin.signer)
+        .setSupplyCap(inputParams[i].asset, inputParams[i].supplyCap)
+    );
+    await waitForTx(
+      await configurator
+        .connect(poolAdmin.signer)
+        .setReserveFactor(inputParams[i].asset, inputParams[i].reserveFactor)
+    );
 
     const reserveData = await pool.getReserveData(mockToken.address);
     mockStableDebtToken = StableDebtToken__factory.connect(
@@ -152,11 +160,11 @@ makeSuite('Interest Rate and Index Overflow', (testEnv) => {
   });
 
   beforeEach(async () => {
-   // snap = await evmSnapshot();
+    // snap = await evmSnapshot();
   });
 
   afterEach(async () => {
-   // await evmRevert(snap);
+    // await evmRevert(snap);
   });
 
   it.skip('ReserveLogic `updateInterestRates` with nextLiquidityRate > type(uint128).max (revert expected)', async () => {
@@ -215,12 +223,14 @@ makeSuite('Interest Rate and Index Overflow', (testEnv) => {
       users: [user],
     } = testEnv;
 
-    await waitForTx(await mockToken
-      .connect(user.signer)
-      ['mint(uint256)'](await convertToCurrencyDecimals(mockToken.address, '10000')));
-      await waitForTx(await mockToken.connect(user.signer).approve(pool.address, MAX_UINT_AMOUNT));
+    await waitForTx(
+      await mockToken
+        .connect(user.signer)
+        ['mint(uint256)'](await convertToCurrencyDecimals(mockToken.address, '10000'))
+    );
+    await waitForTx(await mockToken.connect(user.signer).approve(pool.address, MAX_UINT_AMOUNT));
 
-      await waitForTx(await mockRateStrategy.setVariableBorrowRate(MAX_UINT_AMOUNT));
+    await waitForTx(await mockRateStrategy.setVariableBorrowRate(MAX_UINT_AMOUNT));
 
     await expect(
       pool

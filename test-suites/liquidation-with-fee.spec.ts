@@ -197,9 +197,11 @@ makeSuite('Pool Liquidation: Add fee to liquidations', (testEnv) => {
     } = testEnv;
 
     //mints DAI to depositor
-    waitForTx(await dai
-      .connect(depositor.signer)
-      ['mint(uint256)'](await convertToCurrencyDecimals(dai.address, '1000')));
+    waitForTx(
+      await dai
+        .connect(depositor.signer)
+        ['mint(uint256)'](await convertToCurrencyDecimals(dai.address, '1000'))
+    );
 
     //approve protocol to access depositor wallet
     waitForTx(await dai.connect(depositor.signer).approve(pool.address, MAX_UINT_AMOUNT));
@@ -207,26 +209,32 @@ makeSuite('Pool Liquidation: Add fee to liquidations', (testEnv) => {
     //user 1 deposits 1000 DAI
     const amountDAItoDeposit = await convertToCurrencyDecimals(dai.address, '1000');
 
-    waitForTx(await pool
-      .connect(depositor.signer)
-      .deposit(dai.address, amountDAItoDeposit, depositor.address, '0'));
+    waitForTx(
+      await pool
+        .connect(depositor.signer)
+        .deposit(dai.address, amountDAItoDeposit, depositor.address, '0')
+    );
     //user 2 deposits 1 ETH
     const amountETHtoDeposit = await convertToCurrencyDecimals(weth.address, '0.06775');
 
     //mints WETH to borrower
-    waitForTx(await weth
-      .connect(borrower.signer)
-      ['mint(address,uint256)'](
-        borrower.address,
-        await convertToCurrencyDecimals(weth.address, '1000')
-      ));
+    waitForTx(
+      await weth
+        .connect(borrower.signer)
+        ['mint(address,uint256)'](
+          borrower.address,
+          await convertToCurrencyDecimals(weth.address, '1000')
+        )
+    );
 
     //approve protocol to access the borrower wallet
     waitForTx(await weth.connect(borrower.signer).approve(pool.address, MAX_UINT_AMOUNT));
 
-    waitForTx(await pool
-      .connect(borrower.signer)
-      .deposit(weth.address, amountETHtoDeposit, borrower.address, '0'));
+    waitForTx(
+      await pool
+        .connect(borrower.signer)
+        .deposit(weth.address, amountETHtoDeposit, borrower.address, '0')
+    );
 
     //user 2 borrows
 
@@ -238,9 +246,11 @@ makeSuite('Pool Liquidation: Add fee to liquidations', (testEnv) => {
       userGlobalData.availableBorrowsBase.div(daiPrice).percentMul(9500).toString()
     );
 
-    waitForTx(await pool
-      .connect(borrower.signer)
-      .borrow(dai.address, amountDAIToBorrow, RateMode.Stable, '0', borrower.address));
+    waitForTx(
+      await pool
+        .connect(borrower.signer)
+        .borrow(dai.address, amountDAIToBorrow, RateMode.Stable, '0', borrower.address)
+    );
 
     const userGlobalDataAfter = await pool.getUserAccountData(borrower.address);
 

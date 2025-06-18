@@ -277,12 +277,16 @@ makeSuite('PausablePool', (testEnv: TestEnv) => {
     const amountDAIToDeposit = utils.parseEther('120');
     const amountToBorrow = utils.parseUnits('65', 6);
 
-    let tx = await weth.connect(user.signer)['mint(address,uint256)'](user.address, amountWETHToDeposit);
+    let tx = await weth
+      .connect(user.signer)
+      ['mint(address,uint256)'](user.address, amountWETHToDeposit);
     await tx.wait(5);
     tx = await weth.connect(user.signer).approve(pool.address, MAX_UINT_AMOUNT);
     await tx.wait(5);
 
-    tx = await pool.connect(user.signer).deposit(weth.address, amountWETHToDeposit, user.address, '0');
+    tx = await pool
+      .connect(user.signer)
+      .deposit(weth.address, amountWETHToDeposit, user.address, '0');
     await tx.wait(5);
 
     tx = await dai.connect(user.signer)['mint(uint256)'](amountDAIToDeposit);
@@ -291,7 +295,9 @@ makeSuite('PausablePool', (testEnv: TestEnv) => {
     tx = await dai.connect(user.signer).approve(pool.address, MAX_UINT_AMOUNT);
     await tx.wait(5);
 
-    tx = await pool.connect(user.signer).deposit(dai.address, amountDAIToDeposit, user.address, '0');
+    tx = await pool
+      .connect(user.signer)
+      .deposit(dai.address, amountDAIToDeposit, user.address, '0');
     await tx.wait(5);
 
     tx = await pool.connect(user.signer).borrow(usdc.address, amountToBorrow, 2, 0, user.address);
@@ -308,7 +314,6 @@ makeSuite('PausablePool', (testEnv: TestEnv) => {
     // Unpause pool
     tx = await configurator.connect(users[1].signer).setPoolPause(false);
     await tx.wait(5);
-
   });
 
   it.skip('RebalanceStableBorrowRate', async () => {

@@ -13,7 +13,7 @@ makeSuite('PoolConfigurator: Set Rate Strategy', (testEnv: TestEnv) => {
     //snap = await evmSnapshot();
   });
   afterEach(async () => {
-   // await evmRevert(snap);
+    // await evmRevert(snap);
   });
 
   it.skip('Update Interest Rate of a reserve', async () => {

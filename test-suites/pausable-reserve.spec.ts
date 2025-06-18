@@ -158,11 +158,11 @@ makeSuite('PausableReserve', (testEnv: TestEnv) => {
     const flashAmount = utils.parseEther('0.8');
 
     let tx = await _mockFlashLoanReceiver.setFailExecutionTransfer(true);
-    await tx.wait()
+    await tx.wait();
 
     // Pause pool
     tx = await configurator.connect(users[1].signer).setReservePause(weth.address, true);
-    await tx.wait()
+    await tx.wait();
 
     await expect(
       pool
@@ -180,7 +180,7 @@ makeSuite('PausableReserve', (testEnv: TestEnv) => {
 
     // Unpause pool
     tx = await configurator.connect(users[1].signer).setReservePause(weth.address, false);
-    await tx.wait()
+    await tx.wait();
   });
 
   it.skip('Liquidation call', async () => {
@@ -292,15 +292,14 @@ makeSuite('PausableReserve', (testEnv: TestEnv) => {
     const user = users[1];
     // Pause pool
     let tx = await configurator.connect(users[1].signer).setReservePause(dai.address, true);
-    await tx.wait()
+    await tx.wait();
     await expect(
       pool.connect(user.signer).rebalanceStableBorrowRate(dai.address, user.address)
     ).to.be.revertedWith(RESERVE_PAUSED);
 
     // Unpause pool
     tx = await configurator.connect(users[1].signer).setReservePause(dai.address, false);
-    await tx.wait()
-
+    await tx.wait();
   });
 
   it.skip('setUserUseReserveAsCollateral', async () => {

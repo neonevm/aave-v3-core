@@ -100,12 +100,16 @@ makeSuite('Pool Liquidation: Liquidates borrows in eMode through interest', (tes
       usdc,
     } = testEnv;
 
-    await waitForTx(await usdc.connect(borrower.signer)['mint(uint256)'](utils.parseUnits('10000', 6)));
+    await waitForTx(
+      await usdc.connect(borrower.signer)['mint(uint256)'](utils.parseUnits('10000', 6))
+    );
     await waitForTx(await usdc.connect(borrower.signer).approve(pool.address, MAX_UINT_AMOUNT));
 
-    await waitForTx(await pool
-      .connect(borrower.signer)
-      .supply(usdc.address, utils.parseUnits('10000', 6), borrower.address, 0));
+    await waitForTx(
+      await pool
+        .connect(borrower.signer)
+        .supply(usdc.address, utils.parseUnits('10000', 6), borrower.address, 0)
+    );
 
     await waitForTx(await pool.connect(borrower.signer).setUserEMode(CATEGORY.id));
   });

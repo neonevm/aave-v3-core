@@ -59,7 +59,6 @@ makeSuite('PoolConfigurator: Supply Cap', (testEnv: TestEnv) => {
       0
     );
     await tx.wait();
-
   });
 
   it('Sets the supply cap for DAI and USDC to 1000 Unit, leaving 0 Units to reach the limit', async () => {

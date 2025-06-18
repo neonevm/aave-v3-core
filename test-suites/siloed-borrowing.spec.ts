@@ -13,7 +13,7 @@ makeSuite('Siloed borrowing', (testEnv: TestEnv) => {
   let snapshot;
 
   before(async () => {
-   // snapshot = await evmSnapshot();
+    // snapshot = await evmSnapshot();
   });
 
   it.skip('Configure DAI as siloed borrowing asset', async () => {
@@ -33,28 +33,44 @@ makeSuite('Siloed borrowing', (testEnv: TestEnv) => {
     const daiSupplyAmount = utils.parseEther('1000');
     const usdcSupplyAmount = utils.parseUnits('1000', 6);
 
-    await waitForTx(await dai.connect(users[0].signer)['mint(address,uint256)'](users[0].address, daiSupplyAmount));
+    await waitForTx(
+      await dai.connect(users[0].signer)['mint(address,uint256)'](users[0].address, daiSupplyAmount)
+    );
     await waitForTx(await dai.connect(users[0].signer).approve(pool.address, MAX_UINT_AMOUNT));
-    await waitForTx(await pool.connect(users[0].signer).supply(dai.address, daiSupplyAmount, users[0].address, '0'));
+    await waitForTx(
+      await pool
+        .connect(users[0].signer)
+        .supply(dai.address, daiSupplyAmount, users[0].address, '0')
+    );
 
-    await waitForTx(await usdc
-      .connect(users[1].signer)
-      ['mint(address,uint256)'](users[1].address, usdcSupplyAmount));
+    await waitForTx(
+      await usdc
+        .connect(users[1].signer)
+        ['mint(address,uint256)'](users[1].address, usdcSupplyAmount)
+    );
     await waitForTx(await usdc.connect(users[1].signer).approve(pool.address, MAX_UINT_AMOUNT));
-    await waitForTx(await pool
-      .connect(users[1].signer)
-      .supply(usdc.address, usdcSupplyAmount, users[1].address, '0'));
+    await waitForTx(
+      await pool
+        .connect(users[1].signer)
+        .supply(usdc.address, usdcSupplyAmount, users[1].address, '0')
+    );
 
-    await waitForTx(await weth
-      .connect(users[1].signer)
-      ['mint(address,uint256)'](users[1].address, wethSupplyAmount));
+    await waitForTx(
+      await weth
+        .connect(users[1].signer)
+        ['mint(address,uint256)'](users[1].address, wethSupplyAmount)
+    );
     await waitForTx(await weth.connect(users[1].signer).approve(pool.address, MAX_UINT_AMOUNT));
-    await waitForTx( await pool
-      .connect(users[1].signer)
-      .supply(weth.address, wethSupplyAmount, users[1].address, '0'));
-    await waitForTx(await pool
-      .connect(users[1].signer)
-      .borrow(dai.address, daiBorrowAmount, RateMode.Variable, '0', users[1].address));
+    await waitForTx(
+      await pool
+        .connect(users[1].signer)
+        .supply(weth.address, wethSupplyAmount, users[1].address, '0')
+    );
+    await waitForTx(
+      await pool
+        .connect(users[1].signer)
+        .borrow(dai.address, daiBorrowAmount, RateMode.Variable, '0', users[1].address)
+    );
 
     const debtBalance = await variableDebtDai.balanceOf(users[1].address);
 

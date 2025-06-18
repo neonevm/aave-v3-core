@@ -40,7 +40,6 @@ makeSuite('Pool: Authorized FlashLoan', (testEnv: TestEnv) => {
 
     let tx = expect(await weth['mint(address,uint256)'](deployer.address, amountToDeposit));
 
-
     expect(await weth.approve(pool.address, MAX_UINT_AMOUNT));
 
     expect(await pool.deposit(weth.address, amountToDeposit, userAddress, '0'));
@@ -49,17 +48,16 @@ makeSuite('Pool: Authorized FlashLoan', (testEnv: TestEnv) => {
   it.skip('Takes WETH flash loan with mode = 0, returns the funds correctly', async () => {
     const { pool, helpersContract, weth } = testEnv;
 
-    let tx = 
-      await pool.flashLoan(
-        _mockFlashLoanReceiver.address,
-        [weth.address],
-        [utils.parseEther('0.8')],
-        [0],
-        _mockFlashLoanReceiver.address,
-        '0x10',
-        '0'
-      );
-      await tx.wait(5);
+    let tx = await pool.flashLoan(
+      _mockFlashLoanReceiver.address,
+      [weth.address],
+      [utils.parseEther('0.8')],
+      [0],
+      _mockFlashLoanReceiver.address,
+      '0x10',
+      '0'
+    );
+    await tx.wait(5);
 
     const reserveData = await helpersContract.getReserveData(weth.address);
 

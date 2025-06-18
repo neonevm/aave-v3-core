@@ -26,8 +26,6 @@ const neon_accounts = process.env.NEON_ACCOUNTS ? process.env.NEON_ACCOUNTS.spli
 // @ts-ignore
 const chainId = parseInt(process.env.NEON_CHAIN_ID) || 111;
 
-
-
 const hardhatConfig = {
   gasReporter: {
     enabled: true,
@@ -38,9 +36,9 @@ const hardhatConfig = {
     disambiguatePaths: false,
   },
   ignition: {
-        blockPollingInterval: 1_000,
-        requiredConfirmations: 5,
-      },
+    blockPollingInterval: 1_000,
+    requiredConfirmations: 5,
+  },
   solidity: {
     // Docs for the compiler https://docs.soliditylang.org/en/v0.8.10/using-the-compiler.html
     version: '0.8.10',
@@ -103,7 +101,7 @@ const hardhatConfig = {
       allowUnlimitedContractSize: false,
       timeout: 100000000,
       isFork: true,
-      blockconfirmations: 5
+      blockconfirmations: 5,
     },
   },
   namedAccounts: {
@@ -118,6 +116,5 @@ const hardhatConfig = {
     ],
   },
 };
-
 
 export default hardhatConfig;
